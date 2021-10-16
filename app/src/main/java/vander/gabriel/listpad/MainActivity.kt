@@ -8,6 +8,9 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import vander.gabriel.listpad.ui.theme.ListPadTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,12 +18,33 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ListPadTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                }
+                MyApp()
             }
         }
+    }
+
+
+}
+
+@Composable
+fun MyApp() {
+    val navigationController = rememberNavController()
+
+    // A surface container using the 'background' color from the theme
+    NavHost(
+        navController = navigationController,
+        startDestination = NavigationRoutes.COLLECTION_LIST.route
+    ) {
+        composable(NavigationRoutes.COLLECTION_LIST.route) {
+            CollectionListScreen()
+        }
+    }
+}
+
+@Composable
+fun CollectionListScreen() {
+    Surface(color = MaterialTheme.colors.background) {
+        Greeting("Android")
     }
 }
 
@@ -33,6 +57,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     ListPadTheme {
-        Greeting("Android")
+        MyApp()
     }
 }
