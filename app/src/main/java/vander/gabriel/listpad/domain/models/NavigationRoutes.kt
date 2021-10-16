@@ -1,4 +1,4 @@
-package vander.gabriel.listpad
+package vander.gabriel.listpad.domain.models
 
 enum class NavigationRoutes(val route: String) {
     COLLECTION_LIST("collectionList");

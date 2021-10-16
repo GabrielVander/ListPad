@@ -1,4 +1,4 @@
-package vander.gabriel.listpad.ui.theme
+package vander.gabriel.listpad.presentation.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
