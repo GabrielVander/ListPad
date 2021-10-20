@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ListPad</string>
+    <string name="title_collection_list">Collection List</string>
 </resources>
