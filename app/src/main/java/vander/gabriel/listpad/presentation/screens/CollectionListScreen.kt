@@ -1,4 +1,4 @@
-package vander.gabriel.collection_list.presentation.screens
+package vander.gabriel.listpad.presentation.screens
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface

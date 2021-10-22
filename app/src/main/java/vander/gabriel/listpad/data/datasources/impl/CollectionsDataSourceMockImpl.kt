@@ -1,7 +1,7 @@
-package vander.gabriel.collection_list.data.datasources.impl
+package vander.gabriel.listpad.data.datasources.impl
 
-import vander.gabriel.collection_list.data.datasources.CollectionsDataSource
-import vander.gabriel.collection_list.data.datasources.models.CollectionModel
+import vander.gabriel.listpad.data.datasources.CollectionsDataSource
+import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
 /**
  * A mocked implementation of the CollectionsDataSource interface

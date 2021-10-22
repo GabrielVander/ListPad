@@ -1,4 +1,4 @@
-package vander.gabriel.collection_list.data.datasources.models
+package vander.gabriel.listpad.data.datasources.models
 
 /**
  * A class representation of the data as stored in the database

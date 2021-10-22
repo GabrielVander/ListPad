@@ -7,4 +7,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ListPad"
 include ':app'
-include ':collection_list'

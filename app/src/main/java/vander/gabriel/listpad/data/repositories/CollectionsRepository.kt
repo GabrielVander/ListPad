@@ -1,6 +1,6 @@
-package vander.gabriel.collection_list.data.repositories
+package vander.gabriel.listpad.data.repositories
 
-import vander.gabriel.collection_list.domain.entities.CollectionEntity
+import vander.gabriel.listpad.domain.entities.CollectionEntity
 
 /**
  * The repository responsible for all Collection-related actions

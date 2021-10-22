@@ -1,4 +1,4 @@
-package vander.gabriel.collection_list.domain.entities
+package vander.gabriel.listpad.domain.entities
 
 /**
  * A CollectionEntity is a group of related items

@@ -1,6 +1,6 @@
-package vander.gabriel.collection_list.data.datasources
+package vander.gabriel.listpad.data.datasources
 
-import vander.gabriel.collection_list.data.datasources.models.CollectionModel
+import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
 /**
  * The DataSource responsible for performing all Collection-related actions

@@ -11,7 +11,13 @@ import vander.gabriel.listpad.domain.models.NavigationRoutes
 import vander.gabriel.listpad.presentation.screens.CollectionListScreen
 import vander.gabriel.listpad.presentation.theme.ListPadTheme
 
+/**
+ * The app's only activity
+ */
 class MainActivity : ComponentActivity() {
+    /**
+     * The app's initial structure
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,6 +28,9 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * The main app composable
+ */
 @Composable
 fun MyApp() {
     val navigationController = rememberNavController()
