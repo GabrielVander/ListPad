@@ -32,8 +32,6 @@ z
 Japp/src/main/java/vander/gabriel/listpad/domain/models/NavigationRoutes.kt,1\2\12201663a9ca4a47158db5048354d999d520b3d0
 |
 Lapp/src/main/java/vander/gabriel/listpad/domain/entities/CollectionEntity.kt,5\c\5cb41bce97d20febcdd9e41d2ca1373dfb1164eb
-Ö
-Uapp/src/main/java/vander/gabriel/listpad/presentation/screens/CollectionListScreen.kt,3\7\3769863bf8ac83ef259123a2c7420256d5231675
 É
 Sapp/src/main/java/vander/gabriel/listpad/data/datasources/models/CollectionModel.kt,6\6\66bb19d8b735591f2c88092dcda05c56b33200cc
 è
