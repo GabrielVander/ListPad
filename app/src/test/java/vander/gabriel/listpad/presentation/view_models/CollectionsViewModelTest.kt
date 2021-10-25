@@ -1,11 +1,13 @@
 package vander.gabriel.listpad.presentation.view_models
 
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.Test
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.jupiter.api.*
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -15,14 +17,25 @@ import vander.gabriel.listpad.domain.entities.CollectionEntity
 
 internal class CollectionsViewModelTest {
 
+    @ExperimentalCoroutinesApi
+    val dispatcher = TestCoroutineDispatcher()
+
     var collectionsRepository: CollectionsRepository = mock()
     var collectionsViewModel: CollectionsViewModel =
         CollectionsViewModel(collectionsRepository)
 
+    @ExperimentalCoroutinesApi
     @BeforeEach
-    fun setUp() {
+    internal fun setUp() {
+        Dispatchers.setMain(dispatcher)
         collectionsRepository = mock()
         collectionsViewModel = CollectionsViewModel(collectionsRepository)
+    }
+
+    @ExperimentalCoroutinesApi
+    @AfterEach
+    internal fun tearDown() {
+        Dispatchers.resetMain()
     }
 
     @Nested
@@ -35,7 +48,7 @@ internal class CollectionsViewModelTest {
             whenever(collectionsRepository.getAllCollections())
                 .thenAnswer { emptyList<CollectionEntity>() }
 
-            collectionsViewModel.getCollections()
+            collectionsViewModel.collections
 
             verify(collectionsRepository, times(1)).getAllCollections()
         }

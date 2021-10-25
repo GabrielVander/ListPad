@@ -40,3 +40,5 @@ _app/src/main/java/vander/gabriel/listpad/data/datasources/impl/CollectionsDataS
 Rapp/src/main/java/vander/gabriel/listpad/data/datasources/CollectionsDataSource.kt,f\b\fb0d8712dfa0a49b68071d5be9b702c232d37318
 ƒ
 Sapp/src/main/java/vander/gabriel/listpad/data/repositories/CollectionsRepository.kt,4\4\444454cb912988ab8816187d8bc45182009cb5fd
+†
+Vapp/src/main/java/vander/gabriel/listpad/data/repositories/mappers/CollectionMapper.kt,b\5\b53496d6167a64c27ee3e5de36df3fa0ef675963
