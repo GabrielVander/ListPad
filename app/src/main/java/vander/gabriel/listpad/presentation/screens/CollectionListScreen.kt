@@ -1,6 +1,5 @@
 package vander.gabriel.listpad.presentation.screens
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,7 +29,7 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
     Scaffold(
         topBar = {
             TopAppBar {
-                Text(text = "Collections")
+                Text(text = "All collections")
             }
         }
     ) {
@@ -44,18 +43,22 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
             }
         } else {
             Column(
-                Modifier.fillMaxSize(),
+                Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 collectionsState.dataToDisplayOnScreen.forEach { (_, name, description, isUrgent) ->
                     Card(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        backgroundColor = Color.LightGray,
                         elevation = 2.dp,
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {}
                     ) {
-                        Row(modifier = Modifier.animateContentSize()) {
+                        Row {
                             Column(
                                 modifier = Modifier
                                     .align(Alignment.CenterVertically)
@@ -74,11 +77,11 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                                         .subtitle2
                                         .plus(
                                             TextStyle(
-                                                color = Color.LightGray,
+                                                color = Color.Gray,
                                             )
                                         ),
                                     overflow = TextOverflow.Ellipsis,
-                                    maxLines = 4
+                                    maxLines = 2
                                 )
                             }
                             if (isUrgent) {
