@@ -25,12 +25,6 @@ A
 gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
 z
 Japp/src/main/java/vander/gabriel/listpad/domain/models/NavigationRoutes.kt,1\2\12201663a9ca4a47158db5048354d999d520b3d0
-|
-Lapp/src/main/java/vander/gabriel/listpad/domain/entities/CollectionEntity.kt,5\c\5cb41bce97d20febcdd9e41d2ca1373dfb1164eb
-É
-Sapp/src/main/java/vander/gabriel/listpad/data/datasources/models/CollectionModel.kt,6\6\66bb19d8b735591f2c88092dcda05c56b33200cc
-Ü
-Vapp/src/main/java/vander/gabriel/listpad/data/repositories/mappers/CollectionMapper.kt,b\5\b53496d6167a64c27ee3e5de36df3fa0ef675963
 ê
 `app/src/test/java/vander/gabriel/listpad/data/repositories/impl/CollectionsRepositoryImplTest.kt,c\8\c8cbe7fc1bad24c8ba2963b22ec98e39429ca1ff
 z
