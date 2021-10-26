@@ -2,8 +2,9 @@ package vander.gabriel.listpad.data.repositories.mappers
 
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
+import org.mapstruct.Mappings
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
-import vander.gabriel.listpad.domain.entities.CollectionEntity
+import vander.gabriel.listpad.domain.entities.Collection
 
 /**
  * A basic CollectionMapper with MapStruct
@@ -12,9 +13,20 @@ import vander.gabriel.listpad.domain.entities.CollectionEntity
 interface CollectionMapper {
 
     /**
-     * Converts from a CollectionModel to a CollectionEntity
+     * Converts a CollectionModel into a Collection
      */
-    @Mapping(source = "urgent", target = "isUrgent")
-    fun fromModelToEntity(model: CollectionModel): CollectionEntity
+    @Mappings(
+        Mapping(source = "urgent", target = "isUrgent"),
+        Mapping(source = "categoryId", target = "category")
+    )
+    fun map(model: CollectionModel): Collection
+
+//    /**
+//     * Converts a categoryId (Int) into a CollectionCategory
+//     */
+//    public fun map(categoryId: String): CollectionCategory {
+//        val category = CollectionCategory.getFromId(categoryId)
+//        return category ?: CollectionCategory.GENERAL
+//    }
 
 }

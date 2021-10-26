@@ -1,9 +1,9 @@
 package vander.gabriel.listpad.domain.entities
 
 /**
- * A CollectionEntity is a group of related items
+ * A Collection is a group of related items
  */
-data class CollectionEntity(
+data class Collection(
     /**
      * The unique identifier of this entity
      */
@@ -19,5 +19,10 @@ data class CollectionEntity(
     /**
      * Whether the collection is urgent - important - or not
      */
-    val isUrgent: Boolean
+    val isUrgent: Boolean,
+
+    /**
+     * The collection's overall 'theme'
+     */
+    val category: CollectionCategory = CollectionCategory.GENERAL
 )

@@ -13,7 +13,7 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import vander.gabriel.listpad.data.repositories.CollectionsRepository
-import vander.gabriel.listpad.domain.entities.CollectionEntity
+import vander.gabriel.listpad.domain.entities.Collection
 
 internal class CollectionsViewModelTest {
 
@@ -46,7 +46,7 @@ internal class CollectionsViewModelTest {
         fun shouldCallRepositoryCorrectly(): Unit = runBlocking {
 
             whenever(collectionsRepository.getAllCollections())
-                .thenAnswer { emptyList<CollectionEntity>() }
+                .thenAnswer { emptyList<Collection>() }
 
             collectionsViewModel.state
 

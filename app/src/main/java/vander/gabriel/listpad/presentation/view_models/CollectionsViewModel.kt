@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import vander.gabriel.listpad.data.repositories.CollectionsRepository
 import vander.gabriel.listpad.data.repositories.impl.CollectionsRepositoryImpl
-import vander.gabriel.listpad.domain.entities.CollectionEntity
+import vander.gabriel.listpad.domain.entities.Collection
 
 /**
  * The default UI state
@@ -15,7 +15,7 @@ data class CollectionsState(
     /**
      * A list of collections to be displayed
      */
-    val dataToDisplayOnScreen: List<CollectionEntity> = emptyList(),
+    val dataToDisplayOnScreen: List<Collection> = emptyList(),
     /**
      * Whether a loading indication should be displayed or not
      */

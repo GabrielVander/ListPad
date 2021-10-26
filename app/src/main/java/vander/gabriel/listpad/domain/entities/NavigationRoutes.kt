@@ -1,4 +1,4 @@
-package vander.gabriel.listpad.domain.models
+package vander.gabriel.listpad.domain.entities
 
 /**
  * A route enumeration that should contain all routes available on the app
