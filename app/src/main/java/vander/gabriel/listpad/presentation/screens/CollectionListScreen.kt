@@ -5,12 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,13 +47,12 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                collectionsState.dataToDisplayOnScreen.forEach { (_, name, description) ->
+                collectionsState.dataToDisplayOnScreen.forEach { (_, name, description, isUrgent) ->
                     Card(
                         shape = RoundedCornerShape(8.dp),
                         elevation = 2.dp,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 16.dp)
                             .clickable {}
                     ) {
                         Row(modifier = Modifier.animateContentSize()) {
@@ -81,28 +81,22 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                                     maxLines = 4
                                 )
                             }
+                            if (isUrgent) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Warning,
+                                    contentDescription =
+                                    "Warning icon signaling this collection is urgent",
+                                    modifier = Modifier
+                                        .padding(16.dp)
+                                        .align(Alignment.CenterVertically)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-    }
-}
-
-@Composable
-fun ProfileContentComposable(name: String, description: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(start = 8.dp),
-        verticalArrangement = Arrangement.aligned(Alignment.CenterVertically)
-    ) {
-        Text(name, fontWeight = FontWeight.Bold)
-        Text(
-            description,
-            style = MaterialTheme.typography.body2
-        )
     }
 }
 
