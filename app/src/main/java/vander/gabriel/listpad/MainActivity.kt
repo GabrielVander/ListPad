@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import vander.gabriel.listpad.domain.models.NavigationRoutes
+import vander.gabriel.listpad.domain.entities.NavigationRoutes
 import vander.gabriel.listpad.presentation.screens.CollectionListScreen
 import vander.gabriel.listpad.presentation.theme.ListPadTheme
 

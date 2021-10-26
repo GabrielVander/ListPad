@@ -1,9 +1,9 @@
 package vander.gabriel.listpad.domain.entities
 
 /**
- * A CollectionEntity is a group of related items
+ * A Collection is a group of related items
  */
-data class CollectionEntity(
+data class Collection(
     /**
      * The unique identifier of this entity
      */

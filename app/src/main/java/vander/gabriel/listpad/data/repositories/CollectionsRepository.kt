@@ -1,6 +1,6 @@
 package vander.gabriel.listpad.data.repositories
 
-import vander.gabriel.listpad.domain.entities.CollectionEntity
+import vander.gabriel.listpad.domain.entities.Collection
 
 /**
  * The repository responsible for all Collection-related actions
@@ -10,5 +10,5 @@ interface CollectionsRepository {
     /**
      * Retrieves all Collections available
      */
-    fun getAllCollections(): List<CollectionEntity>
+    fun getAllCollections(): List<Collection>
 }
