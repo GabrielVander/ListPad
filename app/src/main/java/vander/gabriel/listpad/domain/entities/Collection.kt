@@ -19,5 +19,10 @@ data class Collection(
     /**
      * Whether the collection is urgent - important - or not
      */
-    val isUrgent: Boolean
+    val isUrgent: Boolean,
+
+    /**
+     * The collection's overall 'theme'
+     */
+    val category: CollectionCategory = CollectionCategory.GENERAL
 )

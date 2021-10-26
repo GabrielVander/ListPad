@@ -26,7 +26,7 @@ class CollectionsRepositoryImpl(
 
         return models
             .stream()
-            .map(collectionMapper::fromModelToEntity)
+            .map(collectionMapper::map)
             .collect(Collectors.toList())
     }
 }
