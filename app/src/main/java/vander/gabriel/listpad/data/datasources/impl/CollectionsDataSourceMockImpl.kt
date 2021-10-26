@@ -10,20 +10,20 @@ class CollectionsDataSourceMockImpl : CollectionsDataSource {
     private val mockedCollections: List<CollectionModel> = listOf(
         CollectionModel(
             "dd947654-ef8c-42f8-bb9c-8f4242938b02",
-            "poverty",
-            "bad divide alive meantime property",
+            "Poverty",
+            "What’s the secret to bitter and crushed broccoli? Always use thin jasmine.",
             false
         ),
         CollectionModel(
             "f5ca8fcb-0b7f-4881-a9f1-782932684383",
-            "field",
-            "replace king sheet female true",
+            "Field",
+            "What’s the secret to grey and sichuan-style rice? Always use tangy radish sprouts.",
             true
         ),
         CollectionModel(
             "5e010a55-596f-4244-9075-1d8dec01095e",
-            "brain",
-            "mad pretense dry pressure wage",
+            "Brain",
+            "with oysters drink tabasco. ",
             false
         ),
     )
