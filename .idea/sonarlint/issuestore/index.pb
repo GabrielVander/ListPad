@@ -33,5 +33,3 @@ k
 ;app/src/test/java/vander/gabriel/listpad/ExampleUnitTest.kt,1\2\12f6a93be25a624bbc2b9a563e55ebc15982f174
 F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
-ç
-]app/src/test/java/vander/gabriel/listpad/presentation/view_models/CollectionsViewModelTest.kt,5\f\5ff88e102a1ec0c3ef639e9a51297b19268caeae

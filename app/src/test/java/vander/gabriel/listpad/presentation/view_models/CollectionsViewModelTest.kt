@@ -48,7 +48,7 @@ internal class CollectionsViewModelTest {
             whenever(collectionsRepository.getAllCollections())
                 .thenAnswer { emptyList<CollectionEntity>() }
 
-            collectionsViewModel.collections
+            collectionsViewModel.state
 
             verify(collectionsRepository, times(1)).getAllCollections()
         }
