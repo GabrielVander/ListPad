@@ -10,5 +10,5 @@ interface CollectionsRepository {
     /**
      * Retrieves all Collections available
      */
-    suspend fun getAllCollections(): List<CollectionEntity>
+    fun getAllCollections(): List<CollectionEntity>
 }
