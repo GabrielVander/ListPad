@@ -1,11 +1,11 @@
-package vander.gabriel.collection_list.domain.models
+package vander.gabriel.listpad.domain.entities
 
 /**
- * A Collection is a group of related items
+ * A CollectionEntity is a group of related items
  */
-data class Collection(
+data class CollectionEntity(
     /**
-     * The unique identifier of this model
+     * The unique identifier of this entity
      */
     val id: String,
     /**
