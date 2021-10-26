@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
+import vander.gabriel.listpad.presentation.widgets.Pill
 
 /**
  * The primary screen tasked with displaying all collections
@@ -49,7 +50,7 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                collectionsState.dataToDisplayOnScreen.forEach { (_, name, description, isUrgent) ->
+                collectionsState.dataToDisplayOnScreen.forEach {
                     Card(
                         shape = RoundedCornerShape(10.dp),
                         backgroundColor = Color.LightGray,
@@ -58,41 +59,46 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                             .fillMaxWidth()
                             .clickable {}
                     ) {
-                        Row {
-                            Column(
-                                modifier = Modifier
-                                    .align(Alignment.CenterVertically)
-                                    .fillMaxWidth(0.8f)
-                                    .padding(16.dp)
-                            ) {
-                                Text(
-                                    text = name,
-                                    style = MaterialTheme.typography.h6
-                                )
-                                Text(
-                                    text = description,
-                                    textAlign = TextAlign.Start,
-                                    style = MaterialTheme
-                                        .typography
-                                        .subtitle2
-                                        .plus(
-                                            TextStyle(
-                                                color = Color.Gray,
-                                            )
-                                        ),
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 2
-                                )
-                            }
-                            if (isUrgent) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Warning,
-                                    contentDescription =
-                                    "Warning icon signaling this collection is urgent",
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                        ) {
+                            Row {
+                                Column(
                                     modifier = Modifier
-                                        .padding(16.dp)
                                         .align(Alignment.CenterVertically)
-                                )
+                                        .fillMaxWidth(0.8f),
+                                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                                ) {
+                                    Text(
+                                        text = it.name,
+                                        style = MaterialTheme.typography.h6
+                                    )
+                                    Text(
+                                        text = it.description,
+                                        textAlign = TextAlign.Start,
+                                        style = MaterialTheme
+                                            .typography
+                                            .subtitle2
+                                            .plus(
+                                                TextStyle(
+                                                    color = Color.Gray,
+                                                )
+                                            ),
+                                        overflow = TextOverflow.Ellipsis,
+                                        maxLines = 2
+                                    )
+                                    Pill(color = it.category.color, label = it.category.name)
+                                }
+                                if (it.isUrgent) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Warning,
+                                        contentDescription =
+                                        "Warning icon signaling this collection is urgent",
+                                        modifier = Modifier
+                                            .padding(16.dp)
+                                            .align(Alignment.CenterVertically)
+                                    )
+                                }
                             }
                         }
                     }
@@ -102,6 +108,7 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
 
     }
 }
+
 
 /**
  * The default preview of the entire screen
