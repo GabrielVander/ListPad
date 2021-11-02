@@ -25,7 +25,7 @@ internal class GetAllCollectionsUseCaseTest {
     @Test
     @DisplayName("Should call repository correctly")
     fun shouldCallRepositoryCorrectly() {
-        whenever(collectionsRepository.getAllCollections()).thenAnswer { listOf<Collection>() }
+        whenever(collectionsRepository.getAllCollections()).thenAnswer { emptyList<Collection>() }
 
         runBlocking { useCase.execute(Unit) }
 

@@ -1,56 +1,35 @@
 package vander.gabriel.listpad.presentation.view_models
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.setMain
-import org.junit.jupiter.api.*
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
-import vander.gabriel.listpad.data.repositories.CollectionsRepository
-import vander.gabriel.listpad.domain.entities.Collection
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.mockito.kotlin.*
+import vander.gabriel.listpad.domain.usecases.GetAllCollectionsUseCase
 
 internal class CollectionsViewModelTest {
 
-    @ExperimentalCoroutinesApi
-    val dispatcher = TestCoroutineDispatcher()
+    private lateinit var getAllCollectionsUseCase: GetAllCollectionsUseCase
 
-    var collectionsRepository: CollectionsRepository = mock()
-    var collectionsViewModel: CollectionsViewModel =
-        CollectionsViewModel(collectionsRepository)
-
-    @ExperimentalCoroutinesApi
     @BeforeEach
     internal fun setUp() {
-        Dispatchers.setMain(dispatcher)
-        collectionsRepository = mock()
-        collectionsViewModel = CollectionsViewModel(collectionsRepository)
-    }
-
-    @ExperimentalCoroutinesApi
-    @AfterEach
-    internal fun tearDown() {
-        Dispatchers.resetMain()
+        getAllCollectionsUseCase = mock()
     }
 
     @Nested
     inner class GetCollections {
-        @DelicateCoroutinesApi
         @Test
-        @DisplayName("Should call repository correctly")
-        fun shouldCallRepositoryCorrectly(): Unit = runBlocking {
+        @DisplayName("Should call use case correctly")
+        fun shouldCallUseCaseCorrectly() {
+            getAllCollectionsUseCase.stub {
+                onBlocking { execute(any()) }.doReturn(emptyList())
+            }
 
-            whenever(collectionsRepository.getAllCollections())
-                .thenAnswer { emptyList<Collection>() }
+            CollectionsViewModel()
 
-            collectionsViewModel.state
-
-            verify(collectionsRepository, times(1)).getAllCollections()
+            verifyBlocking(getAllCollectionsUseCase) {
+                execute(Unit)
+            }
         }
     }
 }

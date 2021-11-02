@@ -31,7 +31,7 @@ internal class CollectionsRepositoryImplTest {
         @DisplayName("Should call DataSource correctly")
         fun shouldCallDataSourceCorrectly(): Unit = runBlocking {
             whenever(datasource.getAllCollections()).thenAnswer {
-                listOf<CollectionModel>()
+                emptyList<CollectionModel>()
             }
 
             repository.getAllCollections()
