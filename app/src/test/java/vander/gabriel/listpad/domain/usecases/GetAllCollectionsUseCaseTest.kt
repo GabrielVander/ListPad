@@ -1,5 +1,6 @@
 package vander.gabriel.listpad.domain.usecases
 
+import arrow.core.right
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -25,7 +26,10 @@ internal class GetAllCollectionsUseCaseTest {
     @Test
     @DisplayName("Should call repository correctly")
     fun shouldCallRepositoryCorrectly() {
-        whenever(collectionsRepository.getAllCollections()).thenAnswer { emptyList<Collection>() }
+        whenever(collectionsRepository.getAllCollections()).thenAnswer {
+            emptyList<Collection>()
+                .right()
+        }
 
         runBlocking { useCase.execute(Unit) }
 
