@@ -20,6 +20,16 @@ data class CollectionsState(
      * Whether a loading indication should be displayed or not
      */
     val loading: Boolean = false,
+
+    /**
+     * Whether an error occurred or not
+     */
+    val isError: Boolean = false,
+
+    /**
+     * The error's message
+     */
+    val errorMessage: String? = null,
 )
 
 /**
@@ -42,8 +52,12 @@ class CollectionsViewModel(
     )
 
     init {
-        state = CollectionsState(dataToDisplayOnScreen = runBlocking {
+        val dataToDisplayOnScreen = runBlocking {
             getAllCollectionsUseCase.execute(Unit)
-        })
+        }
+        dataToDisplayOnScreen.fold(
+            { state = CollectionsState(isError = true, errorMessage = it.message) },
+            { state = CollectionsState(dataToDisplayOnScreen = it) }
+        )
     }
 }
