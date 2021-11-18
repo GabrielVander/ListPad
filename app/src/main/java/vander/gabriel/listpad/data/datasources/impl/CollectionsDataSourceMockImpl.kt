@@ -1,5 +1,6 @@
 package vander.gabriel.listpad.data.datasources.impl
 
+import arrow.core.nonEmptyListOf
 import vander.gabriel.listpad.data.datasources.CollectionsDataSource
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
@@ -7,7 +8,7 @@ import vander.gabriel.listpad.data.datasources.models.CollectionModel
  * A mocked implementation of the CollectionsDataSource interface
  */
 class CollectionsDataSourceMockImpl : CollectionsDataSource {
-    private val mockedCollections: List<CollectionModel> = listOf(
+    private val mockedCollections: List<CollectionModel> = nonEmptyListOf(
         CollectionModel(
             "dd947654-ef8c-42f8-bb9c-8f4242938b02",
             "Poverty",

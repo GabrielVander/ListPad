@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.runBlocking
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.usecases.GetAllCollectionsUseCase
+import java.util.Collections.emptyList
 
 /**
  * The default UI state
