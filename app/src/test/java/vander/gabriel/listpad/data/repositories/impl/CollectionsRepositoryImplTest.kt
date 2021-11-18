@@ -12,6 +12,7 @@ import vander.gabriel.listpad.data.datasources.CollectionsDataSource
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
 import vander.gabriel.listpad.data.repositories.CollectionsRepository
 import vander.gabriel.listpad.data.repositories.failures.UnexpectedDataSourceFailure
+import java.util.Collections.emptyList
 
 class UnexpectedException(message: String?) : Exception(message)
 
