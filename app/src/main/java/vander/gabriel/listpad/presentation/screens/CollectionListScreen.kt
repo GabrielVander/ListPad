@@ -14,9 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import vander.gabriel.listpad.domain.entities.NavigationRoutes
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 import vander.gabriel.listpad.presentation.widgets.Pill
 
@@ -24,7 +25,10 @@ import vander.gabriel.listpad.presentation.widgets.Pill
  * The primary screen tasked with displaying all collections
  */
 @Composable
-fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel()) {
+fun CollectionListScreen(
+    collectionsViewModel: CollectionsViewModel = viewModel(),
+    navigationController: NavHostController,
+) {
     val collectionsState = collectionsViewModel.state
 
     // A surface container using the 'background' color from the theme
@@ -35,7 +39,15 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
             }
         },
         floatingActionButton = {
-            Button(onClick = { /*TODO*/ }) {
+            Button(
+                onClick = {
+                    navigationController
+                        .navigate(
+                            NavigationRoutes
+                                .COLLECTION_CREATION
+                                .route,
+                        )
+                }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = "Create new collection",
@@ -116,14 +128,4 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
         }
 
     }
-}
-
-
-/**
- * The default preview of the entire screen
- */
-@Preview(showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    CollectionListScreen()
 }

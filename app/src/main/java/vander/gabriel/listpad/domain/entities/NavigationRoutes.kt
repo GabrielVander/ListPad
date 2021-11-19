@@ -7,10 +7,15 @@ enum class NavigationRoutes(
     /**
      * The route name to go to
      */
-    val route: String
+    val route: String,
 ) {
     /**
-     * A rout to the main collection list screen
+     * A route to the main collection list screen
      */
-    COLLECTION_LIST("collectionList");
+    COLLECTION_LIST("collectionList"),
+
+    /**
+     * The collection creation screen
+     */
+    COLLECTION_CREATION("collectionCreation");
 }
