@@ -1,4 +1,4 @@
-package vander.gabriel.listpad.presentation.widgets
+package vander.gabriel.listpad.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

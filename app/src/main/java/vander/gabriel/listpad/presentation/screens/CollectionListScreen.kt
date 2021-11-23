@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
+import vander.gabriel.listpad.presentation.components.Pill
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
-import vander.gabriel.listpad.presentation.widgets.Pill
 
 /**
  * The primary screen tasked with displaying all collections

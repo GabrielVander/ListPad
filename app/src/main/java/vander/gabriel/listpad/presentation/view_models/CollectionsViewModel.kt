@@ -31,6 +31,11 @@ data class CollectionsState(
      * The error's message
      */
     val errorMessage: String? = null,
+
+    /**
+     * The currently focused collection
+     */
+    val currentSelectedCollection: Collection? = null,
 )
 
 /**
