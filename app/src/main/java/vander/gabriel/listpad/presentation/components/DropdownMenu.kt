@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 /**
@@ -21,25 +23,36 @@ import androidx.compose.ui.unit.dp
 fun DropdownMenu(
     colorSelected: Color = MaterialTheme.colors.primary,
     colorBackground: Color = MaterialTheme.colors.onSurface,
-    expanded: Boolean,
-    selectedIndex: Int,
     items: List<String>,
-    onSelect: (Int) -> Unit,
-    onDismissRequest: () -> Unit,
-    content: @Composable () -> Unit,
 ) {
+    var selectedIndex by remember { mutableStateOf(0) }
+    val buttonTitle = items[selectedIndex]
+
+    var expanded by remember { mutableStateOf(false) }
+
     Box {
-        content()
+        OutlinedButton(
+            modifier = Modifier.padding(5.dp),
+            onClick = {
+                expanded = true
+            }
+        ) {
+            Text(
+                text = buttonTitle,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
         androidx.compose.material.DropdownMenu(
             expanded = expanded,
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = { expanded = false },
             modifier = Modifier
                 .background(
                     color = colorBackground,
                     shape = RoundedCornerShape(16.dp)
                 )
         ) {
-            items.forEachIndexed { index, s ->
+            items.forEachIndexed { index, text ->
                 if (selectedIndex == index) {
                     DropdownMenuItem(
                         modifier = Modifier
@@ -49,10 +62,13 @@ fun DropdownMenu(
                                 color = colorSelected,
                                 shape = RoundedCornerShape(16.dp)
                             ),
-                        onClick = { onSelect(index) }
+                        onClick = {
+                            selectedIndex = index
+                            expanded = false
+                        }
                     ) {
                         Text(
-                            text = s,
+                            text = text,
                             color = Color.Black,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -61,10 +77,13 @@ fun DropdownMenu(
                 } else {
                     DropdownMenuItem(
                         modifier = Modifier.fillMaxWidth(),
-                        onClick = { onSelect(index) }
+                        onClick = {
+                            selectedIndex = index
+                            expanded = false
+                        }
                     ) {
                         Text(
-                            text = s,
+                            text = text,
                             color = Color.DarkGray,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()

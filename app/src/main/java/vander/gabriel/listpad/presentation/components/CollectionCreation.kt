@@ -2,24 +2,23 @@ package vander.gabriel.listpad.presentation.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import vander.gabriel.listpad.domain.entities.CollectionCategory
+import vander.gabriel.listpad.presentation.view_models.CollectionCreationState
+import vander.gabriel.listpad.presentation.view_models.CollectionCreationViewModel
 
 /**
  * The collection creation composable
  */
 @Composable
-fun CollectionCreation() {
+fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel = viewModel()) {
+    val collectionsState: CollectionCreationState = collectionCreationViewModel.state
+
     val items = CollectionCategory.values().map { it.name }
-
-    var expanded by remember { mutableStateOf(false) }
-
-    var selectedIndex by remember { mutableStateOf(0) }
-    val buttonTitle = items[selectedIndex]
 
     Column(
         Modifier
@@ -29,13 +28,13 @@ fun CollectionCreation() {
         verticalArrangement = Arrangement.Center,
     ) {
         OutlinedTextField(
-            value = "",
+            value = collectionsState.name,
             label = { Text("Name") },
             onValueChange = {},
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
-            value = "",
+            value = collectionsState.description,
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Description") },
             onValueChange = {},
@@ -48,33 +47,11 @@ fun CollectionCreation() {
             DropdownMenu(
                 colorSelected = MaterialTheme.colors.onSurface,
                 colorBackground = MaterialTheme.colors.primary,
-                expanded = expanded,
-                selectedIndex = selectedIndex,
                 items = items,
-                onSelect = { index ->
-                    selectedIndex = index
-                    expanded = false
-                },
-                onDismissRequest = {
-                    expanded = false
-                }) {
-
-                OutlinedButton(
-                    modifier = Modifier.padding(5.dp),
-                    onClick = {
-                        expanded = true
-                    }
-                ) {
-                    Text(
-                        text = buttonTitle,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+            )
             Row {
                 Checkbox(
-                    checked = true,
+                    checked = collectionsState.isUrgent,
                     onCheckedChange = { }
                 )
                 Spacer(modifier = Modifier.width(15.dp))
