@@ -44,7 +44,7 @@ fun MyApp() {
             CollectionListScreen(navigationController = navigationController)
         }
         composable(NavigationRoutes.COLLECTION_CREATION.route) {
-            CollectionCreationScreen()
+            CollectionCreationScreen(navigationController = navigationController)
         }
     }
 }

@@ -13,4 +13,5 @@ interface CollectionsRepository {
      * Retrieves all Collections available
      */
     fun getAllCollections(): Either<Failure, List<Collection>>
+    fun saveCollection(parameter: Collection): Either<Failure, Collection>
 }

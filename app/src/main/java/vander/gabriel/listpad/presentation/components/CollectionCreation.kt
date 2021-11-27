@@ -16,7 +16,10 @@ import vander.gabriel.listpad.presentation.view_models.CollectionCreationState
 import vander.gabriel.listpad.presentation.view_models.CollectionCreationViewModel
 
 @Composable
-fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel = viewModel()) {
+fun CollectionCreation(
+    collectionCreationViewModel: CollectionCreationViewModel = viewModel(),
+    onSave: () -> Unit = {},
+) {
     val collectionsState: CollectionCreationState = collectionCreationViewModel.state
 
     Column(
@@ -71,7 +74,10 @@ fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel 
             }
         }
         Spacer(modifier = Modifier.height(35.dp))
-        Button(onClick = { collectionCreationViewModel.onSave() }) {
+        Button(onClick = {
+            collectionCreationViewModel.onSave()
+            onSave()
+        }) {
             Text(text = "Save")
         }
     }

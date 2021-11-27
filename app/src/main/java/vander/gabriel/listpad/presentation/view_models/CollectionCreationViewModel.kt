@@ -4,7 +4,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.runBlocking
+import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.CollectionCategory
+import vander.gabriel.listpad.domain.usecases.SaveCollectionUseCase
 
 data class CollectionCreationState(
     val name: String,
@@ -12,9 +15,13 @@ data class CollectionCreationState(
     val category: CollectionCategory,
     val isUrgent: Boolean = false,
     val isLoading: Boolean = false,
+    val errorMessage: String? = null,
 )
 
-class CollectionCreationViewModel : ViewModel() {
+class CollectionCreationViewModel(
+    private val saveCollectionUseCase: SaveCollectionUseCase = SaveCollectionUseCase(),
+) :
+    ViewModel() {
     fun onCategorySelected(category: CollectionCategory) {
         state = state.copy(
             category = category
@@ -43,8 +50,28 @@ class CollectionCreationViewModel : ViewModel() {
         state = state.copy(
             isLoading = true
         )
-        state = state.copy(
-            isLoading = false
+        val collection = Collection(
+            name = state.name,
+            description = state.description,
+            category = state.category,
+            isUrgent = state.isUrgent,
+        )
+        val savedCollection = runBlocking {
+            saveCollectionUseCase.execute(collection)
+        }
+
+        savedCollection.fold(
+            ifLeft = { failure ->
+                state = state.copy(
+                    isLoading = false,
+                    errorMessage = failure.message
+                )
+            },
+            ifRight = {
+                state = state.copy(
+                    isLoading = false
+                )
+            }
         )
     }
 
