@@ -1,47 +1,61 @@
 package vander.gabriel.listpad.presentation.screens
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Warning
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import vander.gabriel.listpad.domain.entities.NavigationRoutes
+import vander.gabriel.listpad.presentation.components.Loader
+import vander.gabriel.listpad.presentation.components.Pill
+import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
+import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
+import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
-import vander.gabriel.listpad.presentation.widgets.Pill
 
-/**
- * The primary screen tasked with displaying all collections
- */
+@ExperimentalMaterialApi
 @Composable
-fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel()) {
+fun CollectionListScreen(
+    collectionsViewModel: CollectionsViewModel = viewModel(),
+    navigationController: NavHostController,
+) {
     val collectionsState = collectionsViewModel.state
 
-    // A surface container using the 'background' color from the theme
     Scaffold(
         topBar = {
             TopAppBar {
                 Text(text = "All collections")
             }
+        },
+        floatingActionButton = {
+            Button(
+                onClick = {
+                    navigationController
+                        .navigate(
+                            NavigationRoutes
+                                .COLLECTION_CREATION
+                                .route,
+                        )
+                }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Create new collection",
+                )
+            }
         }
     ) {
         if (collectionsState.loading) {
-            Column(
-                Modifier.fillMaxSize(),
-                Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                CircularProgressIndicator()
-            }
+            Loader()
         } else {
             Column(
                 Modifier
@@ -51,55 +65,64 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 collectionsState.dataToDisplayOnScreen.forEach {
-                    Card(
-                        shape = RoundedCornerShape(10.dp),
-                        backgroundColor = Color.LightGray,
-                        elevation = 2.dp,
+                        (
+                            _,
+                            name,
+                            description,
+                            isUrgent,
+                            category,
+                        ),
+                    ->
+                    Surface(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {}
+                            .fillMaxWidth(),
+                        shape = RectangleShape,
+                        elevation = COLLECTION_ELEVATION,
+                        onClick = {
+                            /* TODO */
+                        }
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier
+                                .padding(all = LARGE_PADDING)
+                                .fillMaxWidth(),
                         ) {
                             Row {
-                                Column(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterVertically)
-                                        .fillMaxWidth(0.8f),
-                                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                                ) {
-                                    Text(
-                                        text = it.name,
-                                        style = MaterialTheme.typography.h6
-                                    )
-                                    Text(
-                                        text = it.description,
-                                        textAlign = TextAlign.Start,
-                                        style = MaterialTheme
-                                            .typography
-                                            .subtitle2
-                                            .plus(
-                                                TextStyle(
-                                                    color = Color.Gray,
-                                                )
-                                            ),
-                                        overflow = TextOverflow.Ellipsis,
-                                        maxLines = 2
-                                    )
-                                    Pill(color = it.category.color, label = it.category.name)
-                                }
-                                if (it.isUrgent) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Warning,
-                                        contentDescription =
-                                        "Warning icon signaling this collection is urgent",
+                                Text(
+                                    modifier = Modifier.weight(8f),
+                                    text = name,
+                                    style = MaterialTheme.typography.h5,
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1
+                                )
+                                if (isUrgent) {
+                                    Box(
                                         modifier = Modifier
-                                            .padding(16.dp)
-                                            .align(Alignment.CenterVertically)
-                                    )
+                                            .fillMaxWidth()
+                                            .weight(1f),
+                                        contentAlignment = Alignment.TopEnd
+                                    ) {
+                                        Canvas(
+                                            modifier = Modifier
+                                                .size(CATEGORY_INDICATOR_SIZE)
+                                        ) {
+                                            drawCircle(
+                                                color = Color.Red
+                                            )
+                                        }
+                                    }
                                 }
                             }
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Text(
+                                modifier = Modifier.fillMaxWidth(),
+                                text = description,
+                                style = MaterialTheme.typography.subtitle1,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                            Spacer(modifier = Modifier.height(5.dp))
+                            Pill(color = category.color, label = category.name)
                         }
                     }
                 }
@@ -107,14 +130,4 @@ fun CollectionListScreen(collectionsViewModel: CollectionsViewModel = viewModel(
         }
 
     }
-}
-
-
-/**
- * The default preview of the entire screen
- */
-@Preview(showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    CollectionListScreen()
 }

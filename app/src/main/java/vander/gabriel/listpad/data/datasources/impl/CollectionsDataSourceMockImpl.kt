@@ -1,13 +1,12 @@
 package vander.gabriel.listpad.data.datasources.impl
 
+import androidx.compose.runtime.mutableStateListOf
 import vander.gabriel.listpad.data.datasources.CollectionsDataSource
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
+import java.util.*
 
-/**
- * A mocked implementation of the CollectionsDataSource interface
- */
 class CollectionsDataSourceMockImpl : CollectionsDataSource {
-    private val mockedCollections: List<CollectionModel> = listOf(
+    private val mockedCollections: MutableList<CollectionModel> = mutableStateListOf(
         CollectionModel(
             "dd947654-ef8c-42f8-bb9c-8f4242938b02",
             "Poverty",
@@ -31,10 +30,21 @@ class CollectionsDataSourceMockImpl : CollectionsDataSource {
         ),
     )
 
-    /**
-     * Retrieves all available Collections
-     */
     override suspend fun getAllCollections(): List<CollectionModel> {
-        return mockedCollections
+        return mockedCollections.toList()
+    }
+
+    override suspend fun saveCollection(collection: CollectionModel): CollectionModel {
+        val newCollection = CollectionModel(
+            id = UUID.randomUUID().toString(),
+            name = collection.name,
+            description = collection.description,
+            categoryId = collection.categoryId,
+            isUrgent = collection.isUrgent
+        )
+
+        this.mockedCollections.add(newCollection)
+
+        return newCollection
     }
 }

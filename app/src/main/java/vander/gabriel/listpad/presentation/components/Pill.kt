@@ -1,4 +1,4 @@
-package vander.gabriel.listpad.presentation.widgets
+package vander.gabriel.listpad.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,9 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-/**
- * A basic pill shape component
- */
 @Composable
 fun Pill(color: Color, label: String) {
     Box(

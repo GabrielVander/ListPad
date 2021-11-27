@@ -7,7 +7,7 @@ data class Collection(
     /**
      * The unique identifier of this entity
      */
-    val id: String,
+    val id: String? = null,
     /**
      * An unique name that identifies the collection
      */
@@ -24,5 +24,5 @@ data class Collection(
     /**
      * The collection's overall 'theme'
      */
-    val category: CollectionCategory = CollectionCategory.GENERAL
+    val category: CollectionCategory = CollectionCategory.GENERAL,
 )

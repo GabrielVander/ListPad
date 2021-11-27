@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
+import vander.gabriel.listpad.presentation.screens.CollectionCreationScreen
 import vander.gabriel.listpad.presentation.screens.CollectionListScreen
 import vander.gabriel.listpad.presentation.theme.ListPadTheme
 
@@ -40,7 +41,10 @@ fun MyApp() {
         startDestination = NavigationRoutes.COLLECTION_LIST.route
     ) {
         composable(NavigationRoutes.COLLECTION_LIST.route) {
-            CollectionListScreen()
+            CollectionListScreen(navigationController = navigationController)
+        }
+        composable(NavigationRoutes.COLLECTION_CREATION.route) {
+            CollectionCreationScreen(navigationController = navigationController)
         }
     }
 }
