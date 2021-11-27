@@ -11,12 +11,40 @@ data class CollectionCreationState(
     val description: String,
     val category: CollectionCategory,
     val isUrgent: Boolean = false,
+    val isLoading: Boolean = false,
 )
 
 class CollectionCreationViewModel : ViewModel() {
     fun onCategorySelected(category: CollectionCategory) {
         state = state.copy(
             category = category
+        )
+    }
+
+    fun onNameChange(newName: String) {
+        state = state.copy(
+            name = newName
+        )
+    }
+
+    fun onDescriptionChange(newDescription: String) {
+        state = state.copy(
+            description = newDescription
+        )
+    }
+
+    fun onIsUrgentChange(newValue: Boolean) {
+        state = state.copy(
+            isUrgent = newValue
+        )
+    }
+
+    fun onSave() {
+        state = state.copy(
+            isLoading = true
+        )
+        state = state.copy(
+            isLoading = false
         )
     }
 

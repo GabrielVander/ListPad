@@ -11,12 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import vander.gabriel.listpad.domain.entities.CollectionCategory
+import vander.gabriel.listpad.presentation.theme.CATEGORY_DROP_DOWN_HEIGHT
 import vander.gabriel.listpad.presentation.view_models.CollectionCreationState
 import vander.gabriel.listpad.presentation.view_models.CollectionCreationViewModel
 
-/**
- * The collection creation composable
- */
 @Composable
 fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel = viewModel()) {
     val collectionsState: CollectionCreationState = collectionCreationViewModel.state
@@ -31,14 +29,16 @@ fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel 
         OutlinedTextField(
             value = collectionsState.name,
             label = { Text("Name") },
-            onValueChange = { /*TODO*/ },
+            onValueChange = { newName -> collectionCreationViewModel.onNameChange(newName) },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = collectionsState.description,
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Description") },
-            onValueChange = { /*TODO*/ },
+            onValueChange = { newDescription ->
+                collectionCreationViewModel.onDescriptionChange(newDescription)
+            },
         )
         Spacer(modifier = Modifier.height(15.dp))
         Row(
@@ -46,23 +46,32 @@ fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel 
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
             CategoryDropdown(
+                modifier = Modifier.weight(5f),
                 selectedCategory = collectionsState.category,
                 onCategorySelected = { category ->
                     collectionCreationViewModel.onCategorySelected(category)
                 },
                 items = CollectionCategory.values().toList(),
             )
-            Row {
+            Spacer(modifier = Modifier.width(15.dp))
+            Row(
+                modifier = Modifier
+                    .weight(3f)
+                    .height(CATEGORY_DROP_DOWN_HEIGHT),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Checkbox(
                     checked = collectionsState.isUrgent,
-                    onCheckedChange = { /*TODO*/ }
+                    onCheckedChange = { newValue ->
+                        collectionCreationViewModel.onIsUrgentChange(newValue)
+                    }
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(text = "Urgent")
             }
         }
         Spacer(modifier = Modifier.height(35.dp))
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = { collectionCreationViewModel.onSave() }) {
             Text(text = "Save")
         }
     }

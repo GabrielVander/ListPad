@@ -19,14 +19,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import vander.gabriel.listpad.domain.entities.CollectionCategory
+import vander.gabriel.listpad.presentation.theme.CATEGORY_DROP_DOWN_HEIGHT
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
-import vander.gabriel.listpad.presentation.theme.PRIORITY_DROP_DOWN_HEIGHT
 
-/**
- * A generic dropdown menu
- */
 @Composable
 fun CategoryDropdown(
+    modifier: Modifier = Modifier,
     selectedCategory: CollectionCategory,
     onCategorySelected: (CollectionCategory) -> Unit = {},
     items: List<CollectionCategory>,
@@ -41,7 +39,7 @@ fun CategoryDropdown(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colors.background)
-            .height(PRIORITY_DROP_DOWN_HEIGHT)
+            .height(CATEGORY_DROP_DOWN_HEIGHT)
             .clickable { expanded = true }
             .border(
                 width = 1.dp,
@@ -49,13 +47,14 @@ fun CategoryDropdown(
                     alpha = ContentAlpha.disabled
                 ),
                 shape = MaterialTheme.shapes.small
-            ),
+            )
+            .then(modifier),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Canvas(
             modifier = Modifier
                 .size(CATEGORY_INDICATOR_SIZE)
-                .weight(weight = 1f)
+                .weight(weight = 1.5f)
         ) {
             drawCircle(color = selectedCategory.color)
         }
