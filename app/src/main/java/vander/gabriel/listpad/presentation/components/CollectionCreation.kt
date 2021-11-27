@@ -1,7 +1,10 @@
 package vander.gabriel.listpad.presentation.components
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,8 +21,6 @@ import vander.gabriel.listpad.presentation.view_models.CollectionCreationViewMod
 fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel = viewModel()) {
     val collectionsState: CollectionCreationState = collectionCreationViewModel.state
 
-    val items = CollectionCategory.values().map { it.name }
-
     Column(
         Modifier
             .fillMaxSize()
@@ -30,29 +31,31 @@ fun CollectionCreation(collectionCreationViewModel: CollectionCreationViewModel 
         OutlinedTextField(
             value = collectionsState.name,
             label = { Text("Name") },
-            onValueChange = {},
+            onValueChange = { /*TODO*/ },
             modifier = Modifier.fillMaxWidth()
         )
         OutlinedTextField(
             value = collectionsState.description,
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Description") },
-            onValueChange = {},
+            onValueChange = { /*TODO*/ },
         )
         Spacer(modifier = Modifier.height(15.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            DropdownMenu(
-                colorSelected = MaterialTheme.colors.onSurface,
-                colorBackground = MaterialTheme.colors.primary,
-                items = items,
+            CategoryDropdown(
+                selectedCategory = collectionsState.category,
+                onCategorySelected = { category ->
+                    collectionCreationViewModel.onCategorySelected(category)
+                },
+                items = CollectionCategory.values().toList(),
             )
             Row {
                 Checkbox(
                     checked = collectionsState.isUrgent,
-                    onCheckedChange = { }
+                    onCheckedChange = { /*TODO*/ }
                 )
                 Spacer(modifier = Modifier.width(15.dp))
                 Text(text = "Urgent")
