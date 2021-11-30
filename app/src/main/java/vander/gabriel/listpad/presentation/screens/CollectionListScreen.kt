@@ -6,6 +6,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
 import vander.gabriel.listpad.presentation.components.Loader
 import vander.gabriel.listpad.presentation.components.Pill
@@ -23,13 +26,19 @@ import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 
+@InternalCoroutinesApi
 @ExperimentalMaterialApi
 @Composable
 fun CollectionListScreen(
     collectionsViewModel: CollectionsViewModel = viewModel(),
     navigationController: NavHostController,
 ) {
-    val collectionsState = collectionsViewModel.state
+    LaunchedEffect(key1 = Unit) {
+        collectionsViewModel.updateCollectionList()
+    }
+
+    val loading by collectionsViewModel.loading
+    val collections = collectionsViewModel.collectionsStateFlow.value
 
     Scaffold(
         topBar = {
@@ -54,7 +63,7 @@ fun CollectionListScreen(
             }
         }
     ) {
-        if (collectionsState.loading) {
+        if (loading) {
             Loader()
         } else {
             Column(
@@ -64,7 +73,7 @@ fun CollectionListScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                collectionsState.dataToDisplayOnScreen.forEach {
+                collections.forEach {
                         (
                             _,
                             name,
