@@ -105,67 +105,70 @@ fun ListContent(collections: List<Collection>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        collections.forEach {
-                (
-                    _,
-                    name,
-                    description,
-                    isUrgent,
-                    category,
-                ),
-            ->
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                shape = RectangleShape,
-                elevation = COLLECTION_ELEVATION,
-                onClick = {
-                    /* TODO */
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(all = LARGE_PADDING)
-                        .fillMaxWidth(),
-                ) {
-                    Row {
-                        Text(
-                            modifier = Modifier.weight(8f),
-                            text = name,
-                            style = MaterialTheme.typography.h5,
-                            fontWeight = FontWeight.Bold,
-                            maxLines = 1
-                        )
-                        if (isUrgent) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .weight(1f),
-                                contentAlignment = Alignment.TopEnd
-                            ) {
-                                Canvas(
-                                    modifier = Modifier
-                                        .size(CATEGORY_INDICATOR_SIZE)
-                                ) {
-                                    drawCircle(
-                                        color = Color.Red
-                                    )
-                                }
-                            }
+        collections.forEach { collection ->
+            CollectionItem(collection = collection)
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun CollectionItem(
+    collection: Collection,
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth(),
+        shape = RectangleShape,
+        elevation = COLLECTION_ELEVATION,
+        onClick = {
+            /* TODO */
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(all = LARGE_PADDING)
+                .fillMaxWidth(),
+        ) {
+            Row {
+                Text(
+                    modifier = Modifier.weight(8f),
+                    text = collection.name,
+                    style = MaterialTheme.typography.h5,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1
+                )
+                if (collection.isUrgent) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.TopEnd
+                    ) {
+                        Canvas(
+                            modifier = Modifier
+                                .size(CATEGORY_INDICATOR_SIZE)
+                        ) {
+                            drawCircle(
+                                color = Color.Red
+                            )
                         }
                     }
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = description,
-                        style = MaterialTheme.typography.subtitle1,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Pill(color = category.color, label = category.name)
                 }
             }
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = collection.description,
+                style = MaterialTheme.typography.subtitle1,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+            Pill(
+                color = collection.category.color.copy(alpha = .5f),
+                label = collection.category.name,
+            )
         }
     }
 }
