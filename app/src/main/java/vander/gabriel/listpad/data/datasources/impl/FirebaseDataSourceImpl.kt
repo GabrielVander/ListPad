@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import vander.gabriel.listpad.data.datasources.CollectionsDataSource
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
-
 class FirebaseDataSourceImpl : CollectionsDataSource {
     private val tag = "FirebaseDataSource"
     private val firestore = FirebaseFirestore.getInstance()
@@ -39,14 +38,7 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
     override suspend fun saveCollection(collection: CollectionModel): CollectionModel {
         val collectionReference = firestore.collection("collections")
 
-        val collectionMap: Map<String, String> = mapOf(
-            "name" to collection.name,
-            "description" to collection.description,
-            "categoryId" to collection.categoryId,
-            "isUrgent" to collection.isUrgent.toString()
-        )
-
-        val documentSnapshot = collectionReference.add(collectionMap).result?.get()?.result
+        val documentSnapshot = collectionReference.add(collection).result?.get()?.result
 
         return CollectionModel(
             id = documentSnapshot?.id,

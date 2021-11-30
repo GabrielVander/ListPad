@@ -16,7 +16,7 @@ data class CollectionModel(
                 name = doc.getString("name") as String,
                 description = doc.getString("description") as String,
                 categoryId = doc.getString("categoryId") as String,
-                isUrgent = doc.getBoolean("isUrgent") as Boolean
+                isUrgent = doc.getBoolean("isUrgent")!!
             )
         }
     }
