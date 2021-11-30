@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import vander.gabriel.listpad.presentation.components.Pill
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
+import vander.gabriel.listpad.presentation.utils.RequestState
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 
 @InternalCoroutinesApi
@@ -38,12 +40,13 @@ fun CollectionListScreen(
     collectionsViewModel: CollectionsViewModel = viewModel(),
     navigationController: NavHostController,
 ) {
+    val getCollectionsRequestState: RequestState<List<Collection>> by collectionsViewModel
+        .collectionsStateFlow
+        .collectAsState()
+
     LaunchedEffect(key1 = Unit) {
         collectionsViewModel.updateCollectionList()
     }
-
-    val loading by collectionsViewModel.loading
-    val collections = collectionsViewModel.collectionsStateFlow.value
 
     Scaffold(
         topBar = {
@@ -68,16 +71,27 @@ fun CollectionListScreen(
             }
         }
     ) {
-        if (loading) {
-            Loader()
-        } else {
-            if (collections.isEmpty()) {
+        when (getCollectionsRequestState) {
+            is RequestState.Loading -> {
+                Loader()
+            }
+            is RequestState.Success -> {
+                if ((getCollectionsRequestState as RequestState.Success<List<Collection>>)
+                        .data
+                        .isEmpty()
+                ) {
+                    EmptyContent()
+                } else {
+                    ListContent(
+                        (getCollectionsRequestState as RequestState.Success<List<Collection>>)
+                            .data
+                    )
+                }
+            }
+            else -> {
                 EmptyContent()
-            } else {
-                ListContent(collections)
             }
         }
-
     }
 }
 

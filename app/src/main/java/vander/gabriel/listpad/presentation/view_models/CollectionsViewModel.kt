@@ -1,8 +1,5 @@
 package vander.gabriel.listpad.presentation.view_models
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -12,48 +9,35 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.usecases.GetAllCollectionsUseCase
-import java.util.Collections.emptyList
+import vander.gabriel.listpad.presentation.utils.RequestState
 
 
 @InternalCoroutinesApi
 class CollectionsViewModel(
     private val getAllCollectionsUseCase: GetAllCollectionsUseCase = GetAllCollectionsUseCase(),
 ) : ViewModel() {
-
-    private val _loading: MutableState<Boolean> = mutableStateOf(false)
-    val loading: State<Boolean> = _loading
-
-    private val _isError: MutableState<Boolean> = mutableStateOf(false)
-    val isError: State<Boolean> = _isError
-
-    private val _errorMessage: MutableState<String?> = mutableStateOf(null)
-    val errorMessage: State<String?> = _errorMessage
-
-    private val _collectionsStateFlow: MutableStateFlow<List<Collection>> =
-        MutableStateFlow(emptyList())
-    val collectionsStateFlow: StateFlow<List<Collection>> = _collectionsStateFlow
+    private val _collectionsStateFlow: MutableStateFlow<RequestState<List<Collection>>> =
+        MutableStateFlow(RequestState.Loading)
+    val collectionsStateFlow: StateFlow<RequestState<List<Collection>>> = _collectionsStateFlow
 
     @InternalCoroutinesApi
     fun updateCollectionList() {
-        _loading.value = true
+        _collectionsStateFlow.value = RequestState.Loading
+
         val dataToDisplayOnScreen =
             getAllCollectionsUseCase.execute(Unit)
 
         dataToDisplayOnScreen.fold(
             ifLeft = { failure ->
-                _isError.value = true
-                _errorMessage.value = failure.message
+                _collectionsStateFlow.value = RequestState.Error(failure)
             },
             ifRight = { flow ->
                 viewModelScope.launch {
                     flow.collect {
-                        _collectionsStateFlow.value = it
+                        _collectionsStateFlow.value = RequestState.Success(it)
                     }
                 }
             }
         )
-
-        _loading.value = false
-
     }
 }
