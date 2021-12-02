@@ -8,6 +8,6 @@ import vander.gabriel.listpad.data.datasources.models.CollectionModel
  * on to the external infrastructure
  */
 interface CollectionsDataSource {
-    fun getAllCollections(): Flow<List<CollectionModel>>
-    suspend fun saveCollection(collection: CollectionModel): CollectionModel
+    fun getAllCollections(): Flow<List<CollectionModel?>>
+    suspend fun saveCollection(collection: CollectionModel): CollectionModel?
 }

@@ -16,7 +16,6 @@ interface CollectionMapper {
     fun map(model: CollectionModel): Collection
 
     @Mappings(
-        Mapping(source = "urgent", target = "isUrgent"),
         Mapping(source = "category", target = "categoryId")
     )
     fun map(entity: Collection): CollectionModel

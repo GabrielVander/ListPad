@@ -8,5 +8,5 @@ import vander.gabriel.listpad.failures.Failure
 interface CollectionsRepository {
 
     fun getAllCollections(): Either<Failure, Flow<List<Collection>>>
-    fun saveCollection(parameter: Collection): Either<Failure, Collection>
+    fun saveCollection(parameter: Collection): Either<Failure, Collection?>
 }
