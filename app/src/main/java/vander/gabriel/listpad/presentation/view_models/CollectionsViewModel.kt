@@ -1,43 +1,43 @@
 package vander.gabriel.listpad.presentation.view_models
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.runBlocking
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.usecases.GetAllCollectionsUseCase
-import java.util.Collections.emptyList
+import vander.gabriel.listpad.presentation.utils.RequestState
 
-data class CollectionsState(
-    val dataToDisplayOnScreen: List<Collection> = emptyList(),
-    val loading: Boolean = false,
-    val isError: Boolean = false,
-    val errorMessage: String? = null,
-    val currentSelectedCollection: Collection? = null,
-)
 
+@InternalCoroutinesApi
 class CollectionsViewModel(
     private val getAllCollectionsUseCase: GetAllCollectionsUseCase = GetAllCollectionsUseCase(),
 ) : ViewModel() {
+    private val _collectionsStateFlow: MutableStateFlow<RequestState<List<Collection>>> =
+        MutableStateFlow(RequestState.Loading)
+    val collectionsStateFlow: StateFlow<RequestState<List<Collection>>> = _collectionsStateFlow
 
-    var state: CollectionsState by mutableStateOf(
-        CollectionsState(
-            loading = true
-        )
-    )
-
-    init {
-        updateCollectionList()
-    }
-
+    @InternalCoroutinesApi
     fun updateCollectionList() {
-        val dataToDisplayOnScreen = runBlocking {
+        _collectionsStateFlow.value = RequestState.Loading
+
+        val dataToDisplayOnScreen =
             getAllCollectionsUseCase.execute(Unit)
-        }
+
         dataToDisplayOnScreen.fold(
-            { state = CollectionsState(isError = true, errorMessage = it.message) },
-            { state = CollectionsState(dataToDisplayOnScreen = it) }
+            ifLeft = { failure ->
+                _collectionsStateFlow.value = RequestState.Error(failure)
+            },
+            ifRight = { flow ->
+                viewModelScope.launch {
+                    flow.collect {
+                        _collectionsStateFlow.value = RequestState.Success(it)
+                    }
+                }
+            }
         )
     }
 }

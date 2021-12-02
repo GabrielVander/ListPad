@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "690381610906",
+    "project_id": "listpad-16114",
+    "storage_bucket": "listpad-16114.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690381610906:android:08e0baf35a1c910a83e423",
+        "android_client_info": {
+          "package_name": "vander.gabriel.listpad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690381610906-qcfubhr0q62hmiuu93bb8kidt307qvi1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vander.gabriel.listpad",
+            "certificate_hash": "cf8eaecc324d34b2aecf370274afd1cb9bc1b963"
+          }
+        },
+        {
+          "client_id": "690381610906-605ca697kgja5t5qs2cppmn5obbheo7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD07HPE5csP6stmTRhKrzI0vwNUUWqn8Q0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690381610906-605ca697kgja5t5qs2cppmn5obbheo7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

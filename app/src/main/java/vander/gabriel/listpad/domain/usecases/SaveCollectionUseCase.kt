@@ -11,8 +11,8 @@ import vander.gabriel.listpad.failures.Failure
 
 class SaveCollectionUseCase(
     private val repository: CollectionsRepository = CollectionsRepositoryImpl(),
-) : UseCase<Either<Failure, Collection>, Collection> {
-    override suspend fun execute(parameter: Collection): Either<Failure, Collection> {
+) : UseCase<Either<Failure, Collection?>, Collection> {
+    override fun execute(parameter: Collection): Either<Failure, Collection?> {
         return try {
             val result = repository.saveCollection(parameter)
             return result.fold(

@@ -7,5 +7,5 @@ interface UseCase<Type, Parameter> {
     /**
      * The default use case executor
      */
-    suspend fun execute(parameter: Parameter): Type
+    fun execute(parameter: Parameter): Type
 }
