@@ -3,8 +3,6 @@ package vander.gabriel.listpad.presentation.screens
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -22,6 +20,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
+import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
 import vander.gabriel.listpad.presentation.components.EmptyContent
 import vander.gabriel.listpad.presentation.components.Loader
 import vander.gabriel.listpad.presentation.components.Pill
@@ -53,20 +52,14 @@ fun CollectionListScreen(
             }
         },
         floatingActionButton = {
-            Button(
-                onClick = {
-                    navigationController
-                        .navigate(
-                            NavigationRoutes
-                                .COLLECTION_CREATION
-                                .route,
-                        )
-                }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Create new collection",
-                )
-            }
+            AddFloatingActionButton(onClick = {
+                navigationController
+                    .navigate(
+                        NavigationRoutes
+                            .COLLECTION_CREATION
+                            .route,
+                    )
+            })
         }
     ) {
         when (getCollectionsRequestState) {
