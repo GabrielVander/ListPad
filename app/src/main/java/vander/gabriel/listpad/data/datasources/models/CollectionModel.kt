@@ -6,4 +6,5 @@ data class CollectionModel(
     var description: String? = null,
     var urgent: Boolean? = null,
     var categoryId: String? = null,
+    var tasks: List<TaskModel>? = null,
 )

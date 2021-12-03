@@ -55,6 +55,7 @@ class CollectionCreationViewModel(
             description = state.description,
             category = state.category,
             isUrgent = state.isUrgent,
+            tasks = emptyList()
         )
         val savedCollection = runBlocking {
             saveCollectionUseCase.execute(collection)

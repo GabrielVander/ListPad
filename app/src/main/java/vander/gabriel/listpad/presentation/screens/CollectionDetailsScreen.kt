@@ -4,100 +4,47 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
-import vander.gabriel.listpad.domain.entities.NavigationRoutes
 import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
-import vander.gabriel.listpad.presentation.components.EmptyContent
-import vander.gabriel.listpad.presentation.components.Loader
 import vander.gabriel.listpad.presentation.components.Pill
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
-import vander.gabriel.listpad.presentation.utils.RequestState
-import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
+
+const val COLLECTION_ARGUMENT_KEY: String = "collectionId"
 
 @InternalCoroutinesApi
 @ExperimentalMaterialApi
 @Composable
-fun CollectionListScreen(
-    collectionsViewModel: CollectionsViewModel = viewModel(),
-    navigationController: NavHostController,
+fun CollectionDetailsScreen(
+    collectionId: String,
 ) {
-    val getCollectionsRequestState: RequestState<List<Collection>> by collectionsViewModel
-        .collectionsStateFlow
-        .collectAsState()
-
-    LaunchedEffect(key1 = Unit) {
-        collectionsViewModel.updateCollectionList()
-    }
-
     Scaffold(
         topBar = {
             TopAppBar {
-                Text(text = "All collections")
+                Text(text = collectionId)
             }
         },
         floatingActionButton = {
             AddFloatingActionButton(onClick = {
-                navigationController
-                    .navigate(
-                        NavigationRoutes
-                            .COLLECTION_CREATION
-                            .route,
-                    )
+
             })
         }
     ) {
-        when (getCollectionsRequestState) {
-            is RequestState.Loading -> {
-                Loader()
-            }
-            is RequestState.Success -> {
-                if ((getCollectionsRequestState as RequestState.Success<List<Collection>>)
-                        .data
-                        .isEmpty()
-                ) {
-                    EmptyContent()
-                } else {
-                    ListContent(
-                        (getCollectionsRequestState as RequestState.Success<List<Collection>>)
-                            .data,
-                        onCollectionClick = { (id) ->
-                            navigationController
-                                .navigate(
-                                    route = "collectionDetails/${id}"
-                                )
-                        }
-                    )
-                }
-            }
-            else -> {
-                EmptyContent()
-            }
-        }
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-private fun ListContent(
-    collections: List<Collection>,
-    onCollectionClick: (collection: Collection) -> Unit = {},
-) {
+private fun ListContent(collections: List<Collection>) {
     Column(
         Modifier
             .fillMaxSize()
@@ -106,7 +53,7 @@ private fun ListContent(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         collections.forEach { collection ->
-            CollectionItem(collection = collection, onClick = onCollectionClick)
+            CollectionItem(collection = collection)
         }
     }
 }
@@ -115,14 +62,15 @@ private fun ListContent(
 @Composable
 private fun CollectionItem(
     collection: Collection,
-    onClick: (collection: Collection) -> Unit = {},
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RectangleShape,
         elevation = COLLECTION_ELEVATION,
-        onClick = { onClick(collection) }
+        onClick = {
+            /* TODO */
+        }
     ) {
         Column(
             modifier = Modifier
@@ -170,10 +118,4 @@ private fun CollectionItem(
             )
         }
     }
-}
-
-@Composable
-@Preview
-private fun EmptyContentPreview() {
-    EmptyContent()
 }
