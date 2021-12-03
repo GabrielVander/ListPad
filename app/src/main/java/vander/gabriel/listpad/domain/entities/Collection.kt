@@ -1,7 +1,7 @@
 package vander.gabriel.listpad.domain.entities
 
 data class Collection(
-    val id: String? = null,
+    val id: String,
     val name: String,
     val description: String,
     val isUrgent: Boolean,

@@ -1,6 +1,7 @@
 package vander.gabriel.listpad.data.datasources.impl
 
 import android.util.Log
+import com.google.firebase.firestore.BuildConfig
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
@@ -36,11 +37,18 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
         }
     }
 
-    override suspend fun saveCollection(collection: CollectionModel): CollectionModel? {
+    override suspend fun saveCollection(collection: CollectionModel): CollectionModel {
+        val tag = "FirebaseDataSourceImpl.saveCollection"
         val collectionReference = firestore.collection("collections")
 
-        val documentSnapshot = collectionReference.add(collection).result?.get()?.result
+        collection.id?.let {
+            if (BuildConfig.DEBUG) {
+                Log.i(tag, "Saving collection with id ${collection.id}")
+            }
+            collectionReference.document(it)
+                .set(collection).result
+        }
 
-        return documentSnapshot?.toObject<CollectionModel>()
+        return collection
     }
 }
