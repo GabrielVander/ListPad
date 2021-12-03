@@ -1,7 +1,6 @@
 package vander.gabriel.listpad.presentation.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,9 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.InternalCoroutinesApi
-import vander.gabriel.listpad.R
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
+import vander.gabriel.listpad.presentation.components.EmptyContent
 import vander.gabriel.listpad.presentation.components.Loader
 import vander.gabriel.listpad.presentation.components.Pill
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
@@ -97,7 +95,7 @@ fun CollectionListScreen(
 
 @ExperimentalMaterialApi
 @Composable
-fun ListContent(collections: List<Collection>) {
+private fun ListContent(collections: List<Collection>) {
     Column(
         Modifier
             .fillMaxSize()
@@ -170,28 +168,6 @@ private fun CollectionItem(
                 label = collection.category.name,
             )
         }
-    }
-}
-
-@Composable
-fun EmptyContent() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            modifier = Modifier.size(120.dp),
-            painter = painterResource(id = R.drawable.ic_dissatisfied_24),
-            contentDescription = "Sad face icon",
-        )
-        Text(
-            text = "No collections!",
-            fontWeight = FontWeight.Bold,
-            fontSize = MaterialTheme.typography.h6.fontSize
-        )
     }
 }
 
