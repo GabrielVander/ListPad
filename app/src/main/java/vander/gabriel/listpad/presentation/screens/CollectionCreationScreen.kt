@@ -10,9 +10,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.presentation.components.CollectionCreation
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 
-/**
- * The primary screen tasked with displaying all collections
- */
 @InternalCoroutinesApi
 @Composable
 fun CollectionCreationScreen(

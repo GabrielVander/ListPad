@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.CollectionCategory
 import vander.gabriel.listpad.domain.usecases.SaveCollectionUseCase
+import java.util.*
 
 data class CollectionCreationState(
     val name: String,
@@ -51,10 +52,12 @@ class CollectionCreationViewModel(
             isLoading = true
         )
         val collection = Collection(
+            id = UUID.randomUUID().toString(),
             name = state.name,
             description = state.description,
             category = state.category,
             isUrgent = state.isUrgent,
+            tasks = emptyList()
         )
         val savedCollection = runBlocking {
             saveCollectionUseCase.execute(collection)

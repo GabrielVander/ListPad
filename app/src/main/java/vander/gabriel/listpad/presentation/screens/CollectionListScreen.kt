@@ -1,11 +1,8 @@
 package vander.gabriel.listpad.presentation.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,19 +11,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.InternalCoroutinesApi
-import vander.gabriel.listpad.R
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
-import vander.gabriel.listpad.presentation.components.Loader
-import vander.gabriel.listpad.presentation.components.Pill
+import vander.gabriel.listpad.presentation.components.*
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
@@ -55,20 +48,14 @@ fun CollectionListScreen(
             }
         },
         floatingActionButton = {
-            Button(
-                onClick = {
-                    navigationController
-                        .navigate(
-                            NavigationRoutes
-                                .COLLECTION_CREATION
-                                .route,
-                        )
-                }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Create new collection",
-                )
-            }
+            AddFloatingActionButton(onClick = {
+                navigationController
+                    .navigate(
+                        NavigationRoutes
+                            .COLLECTION_CREATION
+                            .route,
+                    )
+            })
         }
     ) {
         when (getCollectionsRequestState) {
@@ -80,16 +67,22 @@ fun CollectionListScreen(
                         .data
                         .isEmpty()
                 ) {
-                    EmptyContent()
+                    EmptyContent("No collections!")
                 } else {
                     ListContent(
                         (getCollectionsRequestState as RequestState.Success<List<Collection>>)
-                            .data
+                            .data,
+                        onCollectionClick = { (id) ->
+                            navigationController
+                                .navigate(
+                                    route = "collectionDetails/${id}"
+                                )
+                        }
                     )
                 }
             }
             else -> {
-                EmptyContent()
+                ErrorMessage("Oh no, something went wrong")
             }
         }
     }
@@ -97,7 +90,10 @@ fun CollectionListScreen(
 
 @ExperimentalMaterialApi
 @Composable
-fun ListContent(collections: List<Collection>) {
+private fun ListContent(
+    collections: List<Collection>,
+    onCollectionClick: (collection: Collection) -> Unit = {},
+) {
     Column(
         Modifier
             .fillMaxSize()
@@ -106,7 +102,7 @@ fun ListContent(collections: List<Collection>) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         collections.forEach { collection ->
-            CollectionItem(collection = collection)
+            CollectionItem(collection = collection, onClick = onCollectionClick)
         }
     }
 }
@@ -115,15 +111,14 @@ fun ListContent(collections: List<Collection>) {
 @Composable
 private fun CollectionItem(
     collection: Collection,
+    onClick: (collection: Collection) -> Unit = {},
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth(),
         shape = RectangleShape,
         elevation = COLLECTION_ELEVATION,
-        onClick = {
-            /* TODO */
-        }
+        onClick = { onClick(collection) }
     ) {
         Column(
             modifier = Modifier
@@ -171,32 +166,4 @@ private fun CollectionItem(
             )
         }
     }
-}
-
-@Composable
-fun EmptyContent() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colors.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            modifier = Modifier.size(120.dp),
-            painter = painterResource(id = R.drawable.ic_dissatisfied_24),
-            contentDescription = "Sad face icon",
-        )
-        Text(
-            text = "No collections!",
-            fontWeight = FontWeight.Bold,
-            fontSize = MaterialTheme.typography.h6.fontSize
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun EmptyContentPreview() {
-    EmptyContent()
 }
