@@ -44,13 +44,19 @@ fun CollectionDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar {
-                Text(
-                    text =
-                    if (getSingleCollectionRequestState is RequestState.Success)
-                        (getSingleCollectionRequestState as RequestState.Success<Collection>)
-                            .data
-                            .name
-                    else "Loading")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    val title =
+                        if (getSingleCollectionRequestState is RequestState.Success) {
+                            (getSingleCollectionRequestState as RequestState.Success<Collection>)
+                                .data
+                                .name
+                        } else "Loading"
+
+                    Text(text = title)
+                }
             }
         },
         floatingActionButton = {
@@ -108,7 +114,7 @@ private fun Content(collection: Collection) {
     ) {
         Text(collection.description)
         if (collection.tasks.isEmpty()) {
-            EmptyContent()
+            EmptyContent("No tasks!")
         } else {
             collection.tasks.forEach { task ->
                 TaskItem(task = task)

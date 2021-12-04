@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import vander.gabriel.listpad.R
 
 @Composable
-fun EmptyContent() {
+fun EmptyContent(message: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,7 +32,7 @@ fun EmptyContent() {
             contentDescription = "Sad face icon",
         )
         Text(
-            text = "No collections!",
+            text = message,
             fontWeight = FontWeight.Bold,
             fontSize = MaterialTheme.typography.h6.fontSize
         )
@@ -42,5 +42,5 @@ fun EmptyContent() {
 @Composable
 @Preview
 private fun EmptyContentPreview() {
-    EmptyContent()
+    EmptyContent("No collections!")
 }

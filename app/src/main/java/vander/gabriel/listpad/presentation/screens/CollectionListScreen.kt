@@ -70,7 +70,7 @@ fun CollectionListScreen(
                         .data
                         .isEmpty()
                 ) {
-                    EmptyContent()
+                    EmptyContent("No collections!")
                 } else {
                     ListContent(
                         (getCollectionsRequestState as RequestState.Success<List<Collection>>)
@@ -85,7 +85,7 @@ fun CollectionListScreen(
                 }
             }
             else -> {
-                EmptyContent()
+                EmptyContent("No collections!")
             }
         }
     }
