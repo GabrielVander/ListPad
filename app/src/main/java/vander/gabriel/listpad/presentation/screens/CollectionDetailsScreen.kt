@@ -61,7 +61,6 @@ fun CollectionDetailsScreen(
             })
         }
     ) {
-        NewTaskDialog(showDialog, setShowDialog, onSaveTask = { /* TODO */ })
         when (getSingleCollectionRequestState) {
             is RequestState.Loading -> {
                 Loader()
@@ -74,10 +73,29 @@ fun CollectionDetailsScreen(
                     }
             }
             is RequestState.Success -> {
-                Content(
-                    collection =
-                    (getSingleCollectionRequestState as RequestState.Success<Collection>)
-                        .data)
+                val collection =
+                    (getSingleCollectionRequestState
+                            as RequestState.Success<Collection>)
+                        .data
+
+                NewTaskDialog(
+                    showDialog,
+                    setShowDialog,
+                    onSaveTask = { task ->
+                        val updatedCollection = Collection(
+                            id = collection.id,
+                            name = collection.name,
+                            description = collection.description,
+                            isUrgent = collection.isUrgent,
+                            category = collection.category,
+                            tasks = collection.tasks.plus(task)
+                        )
+
+                        collectionsViewModel.updateCollection(updatedCollection)
+                    }
+                )
+
+                Content(collection)
             }
             else -> {
                 ErrorMessage("Oh no, something went wrong")

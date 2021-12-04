@@ -3,6 +3,7 @@ package vander.gabriel.listpad.data.datasources.impl
 import android.util.Log
 import com.google.firebase.firestore.BuildConfig
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
@@ -14,11 +15,13 @@ import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
 class FirebaseDataSourceImpl : CollectionsDataSource {
     private val tag = "FirebaseDataSource"
+
     private val firestore = FirebaseFirestore.getInstance()
+    private val collectionReference = firestore.collection("collections")
+
 
     override fun getAllCollections(): Flow<List<CollectionModel?>> = callbackFlow {
-        val collection = firestore.collection("collections")
-        val snapshotListener = collection.addSnapshotListener { value, error ->
+        val snapshotListener = collectionReference.addSnapshotListener { value, error ->
             val response = if (error == null && value != null) {
                 val documents = value.documents
                 Log.i(tag, "Retrieved ${documents.size} documents")
@@ -40,11 +43,10 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
 
     override fun saveCollection(collection: CollectionModel): CollectionModel {
         val tag = "FirebaseDataSourceImpl.saveCollection"
-        val collectionReference = firestore.collection("collections")
 
         collection.id?.let {
             if (BuildConfig.DEBUG) {
-                Log.i(tag, "Saving collection with id ${collection.id}")
+                Log.i(tag, "Saving document with id ${collection.id}")
             }
             collectionReference.document(it)
                 .set(collection).result
@@ -55,7 +57,6 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
 
     override fun getCollection(collectionId: String): Flow<CollectionModel?> = callbackFlow {
         val tag = "FirebaseDataSourceImpl.getCollection"
-        val collectionReference = firestore.collection("collections")
 
         val snapshotListener = collectionReference.document(collectionId)
             .addSnapshotListener { snapshot, error ->
@@ -78,4 +79,31 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
             snapshotListener.remove()
         }
     }
+
+    override fun updateCollection(collection: CollectionModel): CollectionModel {
+        val tag = "FirebaseDataSourceImpl.updateCollection"
+
+        if (BuildConfig.DEBUG) {
+            Log.i(tag, "Updating document with id ${collection.id}")
+        }
+
+        if (collection.id != null) {
+            collectionReference
+                .document(collection.id!!)
+                .set(collection, SetOptions.merge())
+                .addOnSuccessListener {
+                    if (BuildConfig.DEBUG) {
+                        Log.i(tag, "Document with id ${collection.id} updated successfully")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    if (BuildConfig.DEBUG) {
+                        Log.i(tag, "Document with id ${collection.id} failed to update", exception)
+                    }
+                }
+        }
+
+        return collection
+    }
+
 }

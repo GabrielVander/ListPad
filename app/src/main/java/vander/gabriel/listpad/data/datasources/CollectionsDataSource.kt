@@ -7,4 +7,5 @@ interface CollectionsDataSource {
     fun getAllCollections(): Flow<List<CollectionModel?>>
     fun saveCollection(collection: CollectionModel): CollectionModel?
     fun getCollection(collectionId: String): Flow<CollectionModel?>
+    fun updateCollection(collection: CollectionModel): CollectionModel?
 }
