@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import vander.gabriel.listpad.data.datasources.CollectionsDataSource
+import vander.gabriel.listpad.data.datasources.exceptions.DocumentNotFoundException
 import vander.gabriel.listpad.data.datasources.models.CollectionModel
 
 class FirebaseDataSourceImpl : CollectionsDataSource {
@@ -37,7 +38,7 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
         }
     }
 
-    override suspend fun saveCollection(collection: CollectionModel): CollectionModel {
+    override fun saveCollection(collection: CollectionModel): CollectionModel {
         val tag = "FirebaseDataSourceImpl.saveCollection"
         val collectionReference = firestore.collection("collections")
 
@@ -50,5 +51,31 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
         }
 
         return collection
+    }
+
+    override fun getCollection(collectionId: String): Flow<CollectionModel?> = callbackFlow {
+        val tag = "FirebaseDataSourceImpl.getCollection"
+        val collectionReference = firestore.collection("collections")
+
+        val snapshotListener = collectionReference.document(collectionId)
+            .addSnapshotListener { snapshot, error ->
+                if (error == null && snapshot != null) {
+                    Log.i(tag, "Retrieved document with id $collectionId")
+
+                    trySendBlocking(snapshot.toObject<CollectionModel>()
+                        ?: throw DocumentNotFoundException(
+                            collectionId))
+
+                } else {
+                    Log.w(tag,
+                        "Something went wrong while attempting " +
+                                "to retrieve collection with id $collectionId:\n$error")
+                    throw DocumentNotFoundException(collectionId)
+                }
+
+            }
+        awaitClose {
+            snapshotListener.remove()
+        }
     }
 }

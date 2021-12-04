@@ -62,9 +62,9 @@ fun MyApp() {
 
             if (collectionId != null) {
                 CollectionDetailsScreen(collectionId = collectionId)
+            } else {
+                Log.w(tag, "Missing collectionId argument")
             }
-
-            Log.w(tag, "Missing collectionId argument")
         }
     }
 }

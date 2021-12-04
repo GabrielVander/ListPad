@@ -65,6 +65,18 @@ class CollectionsRepositoryImpl(
                 DocumentNotSavedFailure(null).left()
             }
         } catch (e: Exception) {
+            Log.w(tag, "Something went wrong", e)
+            UnexpectedDataSourceFailure(e.message)
+                .left()
+        }
+    }
+
+    override fun getSingleCollection(collectionId: String): Either<Failure, Flow<Collection>> {
+        return try {
+            val result: Flow<CollectionModel?> = dataSource.getCollection(collectionId)
+            result.map { collectionModel -> collectionMapper.map(collectionModel!!) }.right()
+        } catch (e: Exception) {
+            Log.w(tag, "Something went wrong", e)
             UnexpectedDataSourceFailure(e.message)
                 .left()
         }

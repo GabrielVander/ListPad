@@ -9,4 +9,5 @@ interface CollectionsRepository {
 
     fun getAllCollections(): Either<Failure, Flow<List<Collection>>>
     fun saveCollection(parameter: Collection): Either<Failure, Collection?>
+    fun getSingleCollection(collectionId: String): Either<Failure, Flow<Collection>>
 }
