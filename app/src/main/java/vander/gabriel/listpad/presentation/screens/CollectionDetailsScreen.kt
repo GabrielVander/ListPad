@@ -1,6 +1,5 @@
 package vander.gabriel.listpad.presentation.screens
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,20 +8,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
+import vander.gabriel.listpad.domain.entities.Task
 import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
+import vander.gabriel.listpad.presentation.components.EmptyContent
 import vander.gabriel.listpad.presentation.components.Loader
-import vander.gabriel.listpad.presentation.components.Pill
-import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
-import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
 import vander.gabriel.listpad.presentation.utils.RequestState
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 
@@ -62,30 +59,46 @@ fun CollectionDetailsScreen(
             })
         }
     ) {
-        if (getSingleCollectionRequestState is RequestState.Loading) {
-            Loader()
-        } else if (getSingleCollectionRequestState is RequestState.Error) {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .padding(10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
+        when (getSingleCollectionRequestState) {
+            is RequestState.Loading -> {
+                Loader()
+            }
+            is RequestState.Error -> {
                 (getSingleCollectionRequestState as RequestState.Error)
                     .failure
                     .message?.let { message ->
-                        Text(
-                            text = message)
+                        ErrorMessage(message)
                     }
+            }
+            is RequestState.Success -> {
+                Content(
+                    collection =
+                    (getSingleCollectionRequestState as RequestState.Success<Collection>)
+                        .data)
+            }
+            else -> {
+                ErrorMessage("Oh no, something went wrong")
             }
         }
     }
 }
 
+@Composable
+private fun ErrorMessage(message: String) {
+    Column(
+        Modifier
+            .fillMaxHeight()
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(message)
+    }
+}
+
 @ExperimentalMaterialApi
 @Composable
-private fun ListContent(collections: List<Collection>) {
+private fun Content(collection: Collection) {
     Column(
         Modifier
             .fillMaxSize()
@@ -93,16 +106,21 @@ private fun ListContent(collections: List<Collection>) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        collections.forEach { collection ->
-            CollectionItem(collection = collection)
+        Text(collection.description)
+        if (collection.tasks.isEmpty()) {
+            EmptyContent()
+        } else {
+            collection.tasks.forEach { task ->
+                TaskItem(task = task)
+            }
         }
     }
 }
 
 @ExperimentalMaterialApi
 @Composable
-private fun CollectionItem(
-    collection: Collection,
+private fun TaskItem(
+    task: Task,
 ) {
     Surface(
         modifier = Modifier
@@ -113,50 +131,29 @@ private fun CollectionItem(
             /* TODO */
         }
     ) {
-        Column(
-            modifier = Modifier
-                .padding(all = LARGE_PADDING)
-                .fillMaxWidth(),
+        Row(verticalAlignment = Alignment.CenterVertically
         ) {
-            Row {
-                Text(
-                    modifier = Modifier.weight(8f),
-                    text = collection.name,
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-                if (collection.isUrgent) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        contentAlignment = Alignment.TopEnd
-                    ) {
-                        Canvas(
-                            modifier = Modifier
-                                .size(CATEGORY_INDICATOR_SIZE)
-                        ) {
-                            drawCircle(
-                                color = Color.Red
-                            )
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = collection.description,
-                style = MaterialTheme.typography.subtitle1,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+            Checkbox(
+                checked = task.checked,
+                onCheckedChange = { /* TODO */ }
             )
-            Spacer(modifier = Modifier.height(5.dp))
-            Pill(
-                color = collection.category.color.copy(alpha = .5f),
-                label = collection.category.name,
+            Text(
+                modifier = Modifier.weight(8f),
+                text = task.description,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
         }
     }
+}
+
+@ExperimentalMaterialApi
+@Composable
+@Preview
+private fun TaskItemPreview() {
+    TaskItem(task = Task(
+        checked = true,
+        description = "Remember: breaked zucchini tastes best when toasted"
+    ))
 }

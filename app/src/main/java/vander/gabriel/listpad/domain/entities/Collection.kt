@@ -6,5 +6,5 @@ data class Collection(
     val description: String,
     val isUrgent: Boolean,
     val category: CollectionCategory = CollectionCategory.GENERAL,
-    val tasks: List<Task>?,
+    val tasks: List<Task> = emptyList(),
 )
