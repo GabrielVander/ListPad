@@ -82,12 +82,7 @@ fun CollectionDetailsScreen(
                     showDialog,
                     setShowDialog,
                     onSaveTask = { task ->
-                        val updatedCollection = Collection(
-                            id = collection.id,
-                            name = collection.name,
-                            description = collection.description,
-                            isUrgent = collection.isUrgent,
-                            category = collection.category,
+                        val updatedCollection = collection.copy(
                             tasks = collection.tasks.plus(task)
                         )
 
@@ -95,7 +90,14 @@ fun CollectionDetailsScreen(
                     }
                 )
 
-                Content(collection)
+                Content(collection, onTaskUpdate = {
+                    val updatedCollection = collection.copy(
+                        tasks = collection.tasks
+                    )
+
+                    collectionsViewModel.updateCollection(updatedCollection)
+                    collectionsViewModel.getCollection(collectionId)
+                })
             }
             else -> {
                 ErrorMessage("Oh no, something went wrong")
@@ -136,7 +138,7 @@ fun NewTaskDialog(
 
 @ExperimentalMaterialApi
 @Composable
-private fun Content(collection: Collection) {
+private fun Content(collection: Collection, onTaskUpdate: () -> Unit = {}) {
     Column(
         Modifier
             .fillMaxSize()
@@ -148,9 +150,16 @@ private fun Content(collection: Collection) {
         if (collection.tasks.isEmpty()) {
             EmptyContent("No tasks!")
         } else {
-            collection.tasks.forEach { task ->
-                TaskItem(task = task)
-            }
+            collection
+                .tasks
+                .forEach { task ->
+                    TaskItem(
+                        task = task,
+                        onCheckedChange = {
+                            onTaskUpdate()
+                        }
+                    )
+                }
         }
     }
 }
@@ -159,6 +168,7 @@ private fun Content(collection: Collection) {
 @Composable
 private fun TaskItem(
     task: Task,
+    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Surface(
         modifier = Modifier
@@ -166,11 +176,17 @@ private fun TaskItem(
         shape = RectangleShape,
         elevation = COLLECTION_ELEVATION,
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Checkbox(
+                modifier = Modifier.weight(1f),
                 checked = task.checked,
-                onCheckedChange = { /* TODO */ }
+                onCheckedChange = {
+                    task.checked = !task.checked
+                    onCheckedChange(!task.checked)
+                }
             )
             Text(
                 modifier = Modifier.weight(8f),

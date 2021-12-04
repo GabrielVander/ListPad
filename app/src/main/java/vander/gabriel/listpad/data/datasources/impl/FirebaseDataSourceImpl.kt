@@ -42,8 +42,6 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
     }
 
     override fun saveCollection(collection: CollectionModel): CollectionModel {
-        val tag = "FirebaseDataSourceImpl.saveCollection"
-
         collection.id?.let {
             if (BuildConfig.DEBUG) {
                 Log.i(tag, "Saving document with id ${collection.id}")
@@ -56,8 +54,6 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
     }
 
     override fun getCollection(collectionId: String): Flow<CollectionModel?> = callbackFlow {
-        val tag = "FirebaseDataSourceImpl.getCollection"
-
         val snapshotListener = collectionReference.document(collectionId)
             .addSnapshotListener { snapshot, error ->
                 if (error == null && snapshot != null) {
@@ -81,8 +77,6 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
     }
 
     override fun updateCollection(collection: CollectionModel): CollectionModel {
-        val tag = "FirebaseDataSourceImpl.updateCollection"
-
         if (BuildConfig.DEBUG) {
             Log.i(tag, "Updating document with id ${collection.id}")
         }
