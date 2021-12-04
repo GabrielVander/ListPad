@@ -19,10 +19,7 @@ import androidx.navigation.NavHostController
 import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
-import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
-import vander.gabriel.listpad.presentation.components.EmptyContent
-import vander.gabriel.listpad.presentation.components.Loader
-import vander.gabriel.listpad.presentation.components.Pill
+import vander.gabriel.listpad.presentation.components.*
 import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.theme.LARGE_PADDING

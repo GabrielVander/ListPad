@@ -2,10 +2,7 @@ package vander.gabriel.listpad.presentation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -18,6 +15,7 @@ import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.Task
 import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
 import vander.gabriel.listpad.presentation.components.EmptyContent
+import vander.gabriel.listpad.presentation.components.ErrorMessage
 import vander.gabriel.listpad.presentation.components.Loader
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.utils.RequestState
@@ -32,6 +30,7 @@ fun CollectionDetailsScreen(
     collectionsViewModel: CollectionsViewModel = viewModel(),
     collectionId: String,
 ) {
+    val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     val getSingleCollectionRequestState: RequestState<Collection> by collectionsViewModel
         .singleCollectionStateFlow
@@ -61,10 +60,24 @@ fun CollectionDetailsScreen(
         },
         floatingActionButton = {
             AddFloatingActionButton(onClick = {
-
+                setShowDialog(true)
             })
         }
     ) {
+        Dialog(
+            showDialog = showDialog,
+            setShowDialog = setShowDialog,
+            title = "Add task",
+            content =
+            {
+                OutlinedTextField(
+                    value = "",
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("Description") },
+                    onValueChange = { },
+                )
+            }
+        )
         when (getSingleCollectionRequestState) {
             is RequestState.Loading -> {
                 Loader()
@@ -120,9 +133,6 @@ private fun TaskItem(
             .fillMaxWidth(),
         shape = RectangleShape,
         elevation = COLLECTION_ELEVATION,
-        onClick = {
-            /* TODO */
-        }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically
         ) {
@@ -138,6 +148,45 @@ private fun TaskItem(
                 maxLines = 1
             )
         }
+    }
+}
+
+@Composable
+fun Dialog(
+    showDialog: Boolean,
+    title: String,
+    confirmText: String = "Confirm",
+    dismissText: String = "Dismiss",
+    content: @Composable (() -> Unit)? = null,
+    setShowDialog: (Boolean) -> Unit,
+) {
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+            },
+            title = {
+                Text(title)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text(confirmText)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text(dismissText)
+                }
+            },
+            text = content,
+        )
     }
 }
 
