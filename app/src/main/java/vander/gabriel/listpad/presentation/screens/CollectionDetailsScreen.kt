@@ -13,10 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.Task
-import vander.gabriel.listpad.presentation.components.AddFloatingActionButton
-import vander.gabriel.listpad.presentation.components.EmptyContent
-import vander.gabriel.listpad.presentation.components.ErrorMessage
-import vander.gabriel.listpad.presentation.components.Loader
+import vander.gabriel.listpad.presentation.components.*
 import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
 import vander.gabriel.listpad.presentation.utils.RequestState
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
@@ -148,45 +145,6 @@ private fun TaskItem(
                 maxLines = 1
             )
         }
-    }
-}
-
-@Composable
-fun Dialog(
-    showDialog: Boolean,
-    title: String,
-    confirmText: String = "Confirm",
-    dismissText: String = "Dismiss",
-    content: @Composable (() -> Unit)? = null,
-    setShowDialog: (Boolean) -> Unit,
-) {
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = {
-            },
-            title = {
-                Text(title)
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        setShowDialog(false)
-                    },
-                ) {
-                    Text(confirmText)
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        setShowDialog(false)
-                    },
-                ) {
-                    Text(dismissText)
-                }
-            },
-            text = content,
-        )
     }
 }
 
