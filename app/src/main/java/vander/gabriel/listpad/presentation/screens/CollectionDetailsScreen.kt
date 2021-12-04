@@ -6,6 +6,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -161,7 +163,11 @@ private fun TaskItem(
             Text(
                 modifier = Modifier.weight(8f),
                 text = task.description,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h5.plus(
+                    TextStyle(
+                        textDecoration = if (task.checked) TextDecoration.LineThrough else null
+                    )
+                ),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
