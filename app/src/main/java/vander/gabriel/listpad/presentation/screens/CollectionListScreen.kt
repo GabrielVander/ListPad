@@ -85,7 +85,7 @@ fun CollectionListScreen(
                 }
             }
             else -> {
-                EmptyContent("No collections!")
+                ErrorMessage("Oh no, something went wrong")
             }
         }
     }

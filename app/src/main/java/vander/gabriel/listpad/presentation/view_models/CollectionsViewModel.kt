@@ -21,11 +21,11 @@ class CollectionsViewModel(
     = GetSingleCollectionUseCase(),
 ) : ViewModel() {
     private val _collectionsStateFlow: MutableStateFlow<RequestState<List<Collection>>> =
-        MutableStateFlow(RequestState.Loading)
+        MutableStateFlow(RequestState.Idle)
     val collectionsStateFlow: StateFlow<RequestState<List<Collection>>> = _collectionsStateFlow
 
     private val _singleCollectionStateFlow: MutableStateFlow<RequestState<Collection>> =
-        MutableStateFlow(RequestState.Loading)
+        MutableStateFlow(RequestState.Idle)
     val singleCollectionStateFlow: StateFlow<RequestState<Collection>> =
         _singleCollectionStateFlow
 

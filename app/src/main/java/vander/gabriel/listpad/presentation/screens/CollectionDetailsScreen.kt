@@ -89,19 +89,6 @@ fun CollectionDetailsScreen(
     }
 }
 
-@Composable
-private fun ErrorMessage(message: String) {
-    Column(
-        Modifier
-            .fillMaxHeight()
-            .padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(message)
-    }
-}
-
 @ExperimentalMaterialApi
 @Composable
 private fun Content(collection: Collection) {
