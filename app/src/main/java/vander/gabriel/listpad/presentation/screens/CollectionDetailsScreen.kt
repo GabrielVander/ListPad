@@ -61,20 +61,7 @@ fun CollectionDetailsScreen(
             })
         }
     ) {
-        Dialog(
-            showDialog = showDialog,
-            setShowDialog = setShowDialog,
-            title = "Add task",
-            content =
-            {
-                OutlinedTextField(
-                    value = "",
-                    modifier = Modifier.fillMaxWidth(),
-                    label = { Text("Description") },
-                    onValueChange = { },
-                )
-            }
-        )
+        NewTaskDialog(showDialog, setShowDialog, onSaveTask = { /* TODO */ })
         when (getSingleCollectionRequestState) {
             is RequestState.Loading -> {
                 Loader()
@@ -97,6 +84,36 @@ fun CollectionDetailsScreen(
             }
         }
     }
+}
+
+@Composable
+fun NewTaskDialog(
+    showDialog: Boolean,
+    setShowDialog: (Boolean) -> Unit,
+    onSaveTask: (Task) -> Unit = {},
+) {
+    val (fieldValue, setFieldValue) = remember { mutableStateOf("") }
+
+    Dialog(
+        showDialog = showDialog,
+        onConfirm = {
+            onSaveTask(Task(description = fieldValue))
+            setShowDialog(false)
+        },
+        onDismiss = {
+            setShowDialog(false)
+        },
+        title = "Add task",
+        content =
+        {
+            OutlinedTextField(
+                value = fieldValue,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Description") },
+                onValueChange = setFieldValue,
+            )
+        }
+    )
 }
 
 @ExperimentalMaterialApi

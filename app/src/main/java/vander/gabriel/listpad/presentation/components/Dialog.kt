@@ -12,8 +12,9 @@ fun Dialog(
     title: String,
     confirmText: String = "Confirm",
     dismissText: String = "Dismiss",
+    onConfirm: () -> Unit = {},
+    onDismiss: () -> Unit = {},
     content: @Composable (() -> Unit)? = null,
-    setShowDialog: (Boolean) -> Unit,
 ) {
     if (showDialog) {
         AlertDialog(
@@ -24,18 +25,14 @@ fun Dialog(
             },
             confirmButton = {
                 Button(
-                    onClick = {
-                        setShowDialog(false)
-                    },
+                    onClick = onConfirm,
                 ) {
                     Text(confirmText)
                 }
             },
             dismissButton = {
                 Button(
-                    onClick = {
-                        setShowDialog(false)
-                    },
+                    onClick = onDismiss,
                 ) {
                     Text(dismissText)
                 }
@@ -52,6 +49,5 @@ fun DialogPreview() {
         showDialog = true,
         title = "Dialog",
         content = { Text(text = "Some content") },
-        setShowDialog = {}
     )
 }
