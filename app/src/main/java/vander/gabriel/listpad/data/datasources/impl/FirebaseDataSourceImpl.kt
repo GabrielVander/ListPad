@@ -100,4 +100,24 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
         return collection
     }
 
+    override fun deleteCollection(collectionId: String) {
+        if (BuildConfig.DEBUG) {
+            Log.i(tag, "Deleting document with id $collectionId")
+        }
+
+        collectionReference
+            .document(collectionId)
+            .delete()
+            .addOnSuccessListener {
+                if (BuildConfig.DEBUG) {
+                    Log.i(tag, "Document with id $collectionId updated successfully")
+                }
+            }
+            .addOnFailureListener { exception ->
+                if (BuildConfig.DEBUG) {
+                    Log.i(tag, "Document with id $collectionId failed to update", exception)
+                }
+            }
+    }
+
 }

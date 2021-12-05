@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import vander.gabriel.listpad.domain.entities.Task
+import java.util.*
 
 @Composable
 fun NewTaskDialog(
@@ -20,21 +21,24 @@ fun NewTaskDialog(
     Dialog(
         showDialog = showDialog,
         onConfirm = {
-            onSaveTask(Task(description = fieldValue))
+            onSaveTask(
+                Task(
+                    id = UUID.randomUUID().toString(),
+                    description = fieldValue
+                )
+            )
             setShowDialog(false)
         },
         onDismiss = {
             setShowDialog(false)
         },
-        title = "Add task",
-        content =
-        {
-            OutlinedTextField(
-                value = fieldValue,
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("Description") },
-                onValueChange = setFieldValue,
-            )
-        }
-    )
+        title = "Add task")
+    {
+        OutlinedTextField(
+            value = fieldValue,
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("Description") },
+            onValueChange = setFieldValue,
+        )
+    }
 }

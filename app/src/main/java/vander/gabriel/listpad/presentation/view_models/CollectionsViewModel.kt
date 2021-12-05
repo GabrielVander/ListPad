@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import vander.gabriel.listpad.domain.entities.Collection
+import vander.gabriel.listpad.domain.usecases.DeleteCollectionUseCase
 import vander.gabriel.listpad.domain.usecases.GetAllCollectionsUseCase
 import vander.gabriel.listpad.domain.usecases.GetSingleCollectionUseCase
 import vander.gabriel.listpad.domain.usecases.UpdateCollectionUseCase
@@ -23,6 +24,8 @@ class CollectionsViewModel(
     = GetSingleCollectionUseCase(),
     private val updateCollectionUseCase: UpdateCollectionUseCase
     = UpdateCollectionUseCase(),
+    private val deleteCollectionUseCase: DeleteCollectionUseCase
+    = DeleteCollectionUseCase(),
 ) : ViewModel() {
     private val _collectionsStateFlow: MutableStateFlow<RequestState<List<Collection>>> =
         MutableStateFlow(RequestState.Idle)
@@ -77,6 +80,12 @@ class CollectionsViewModel(
     fun updateCollection(collection: Collection) {
         runBlocking {
             updateCollectionUseCase.execute(collection)
+        }
+    }
+
+    fun deleteCollection(collectionId: String) {
+        runBlocking {
+            deleteCollectionUseCase.execute(collectionId)
         }
     }
 }
