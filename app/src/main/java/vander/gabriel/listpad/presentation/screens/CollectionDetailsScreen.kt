@@ -169,7 +169,7 @@ private fun TaskItem(
                     )
                 ),
                 overflow = TextOverflow.Ellipsis,
-                maxLines = 1
+                maxLines = 3
             )
         }
     }
