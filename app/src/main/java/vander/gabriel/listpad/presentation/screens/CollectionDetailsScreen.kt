@@ -143,7 +143,7 @@ private fun Content(
             collection
                 .tasks
                 .forEach { task ->
-                    DismissibleTask(task, onDeleteTask, onTaskUpdate)
+                    DismissibleTaskItem(task, onDeleteTask, onTaskUpdate)
                 }
 
         }

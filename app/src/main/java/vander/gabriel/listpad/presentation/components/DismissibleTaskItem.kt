@@ -7,7 +7,7 @@ import vander.gabriel.listpad.domain.entities.Task
 
 @ExperimentalMaterialApi
 @Composable
-fun DismissibleTask(
+fun DismissibleTaskItem(
     task: Task,
     onDeleteTask: (Task) -> Unit,
     onTaskUpdate: (Task) -> Unit,
