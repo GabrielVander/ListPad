@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -68,13 +65,17 @@ fun CollectionListScreen(
                     EmptyContent("No collections!")
                 } else {
                     ListContent(
-                        (getCollectionsRequestState as RequestState.Success<List<Collection>>)
+                        collections = (getCollectionsRequestState
+                                as RequestState.Success<List<Collection>>)
                             .data,
                         onCollectionClick = { (id) ->
                             navigationController
                                 .navigate(
                                     route = "collectionDetails/${id}"
                                 )
+                        },
+                        onDeleteCollection = {
+                            collectionsViewModel.deleteCollection(it.id)
                         }
                     )
                 }
@@ -91,6 +92,7 @@ fun CollectionListScreen(
 private fun ListContent(
     collections: List<Collection>,
     onCollectionClick: (collection: Collection) -> Unit = {},
+    onDeleteCollection: (collection: Collection) -> Unit = {},
 ) {
     Column(
         Modifier
@@ -100,7 +102,33 @@ private fun ListContent(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         collections.forEach { collection ->
-            CollectionItem(collection = collection, onClick = onCollectionClick)
+            DismissibleCollection(
+                collection = collection,
+                onDeleteCollection = onDeleteCollection,
+                onCollectionClick = onCollectionClick
+            )
         }
     }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun DismissibleCollection(
+    collection: Collection,
+    onDeleteCollection: (collection: Collection) -> Unit,
+    onCollectionClick: (collection: Collection) -> Unit,
+) {
+    Dismissible(
+        item = collection,
+        dismissed = onDeleteCollection,
+        directions = setOf(
+            DismissDirection.EndToStart
+        ),
+        content = {
+            CollectionItem(
+                collection = collection,
+                onClick = onCollectionClick
+            )
+        }
+    )
 }

@@ -112,4 +112,15 @@ class CollectionsRepositoryImpl(
                 .left()
         }
     }
+
+    override fun deleteCollection(collectionId: String): Either<Failure, Unit> {
+        return try {
+            runBlocking { dataSource.deleteCollection(collectionId) }
+            Unit.right()
+        } catch (e: Exception) {
+            Log.w(tag, defaultErrorMessage, e)
+            UnexpectedDataSourceFailure(e.message)
+                .left()
+        }
+    }
 }
