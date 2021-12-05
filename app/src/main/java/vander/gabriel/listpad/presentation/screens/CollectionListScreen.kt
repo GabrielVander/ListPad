@@ -1,18 +1,19 @@
 package vander.gabriel.listpad.presentation.screens
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -20,9 +21,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.NavigationRoutes
 import vander.gabriel.listpad.presentation.components.*
-import vander.gabriel.listpad.presentation.theme.CATEGORY_INDICATOR_SIZE
-import vander.gabriel.listpad.presentation.theme.COLLECTION_ELEVATION
-import vander.gabriel.listpad.presentation.theme.LARGE_PADDING
 import vander.gabriel.listpad.presentation.utils.RequestState
 import vander.gabriel.listpad.presentation.view_models.CollectionsViewModel
 
@@ -103,67 +101,6 @@ private fun ListContent(
     ) {
         collections.forEach { collection ->
             CollectionItem(collection = collection, onClick = onCollectionClick)
-        }
-    }
-}
-
-@ExperimentalMaterialApi
-@Composable
-private fun CollectionItem(
-    collection: Collection,
-    onClick: (collection: Collection) -> Unit = {},
-) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RectangleShape,
-        elevation = COLLECTION_ELEVATION,
-        onClick = { onClick(collection) }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(all = LARGE_PADDING)
-                .fillMaxWidth(),
-        ) {
-            Row {
-                Text(
-                    modifier = Modifier.weight(8f),
-                    text = collection.name,
-                    style = MaterialTheme.typography.h5,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-                if (collection.isUrgent) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        contentAlignment = Alignment.TopEnd
-                    ) {
-                        Canvas(
-                            modifier = Modifier
-                                .size(CATEGORY_INDICATOR_SIZE)
-                        ) {
-                            drawCircle(
-                                color = Color.Red
-                            )
-                        }
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = collection.description,
-                style = MaterialTheme.typography.subtitle1,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            Pill(
-                color = collection.category.color.copy(alpha = .5f),
-                label = collection.category.name,
-            )
         }
     }
 }
