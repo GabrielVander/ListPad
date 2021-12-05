@@ -94,13 +94,17 @@ fun CollectionDetailsScreen(
 
                 Content(
                     collection = collection,
-                    onTaskUpdate = {
+                    onTaskUpdate = { updatedTask ->
                         val updatedCollection = collection.copy(
-                            tasks = collection.tasks
+                            tasks = collection
+                                .tasks
+                                .map { task ->
+                                    if (task.id == updatedTask.id) updatedTask
+                                    else task
+                                }
                         )
 
                         collectionsViewModel.updateCollection(updatedCollection)
-                        collectionsViewModel.getCollection(collectionId)
                     },
                     onDeleteTask = { taskToDelete ->
                         val updatedCollection = collection.copy(
@@ -124,7 +128,7 @@ fun CollectionDetailsScreen(
 @Composable
 private fun Content(
     collection: Collection,
-    onTaskUpdate: () -> Unit = {},
+    onTaskUpdate: (Task) -> Unit = {},
     onDeleteTask: (Task) -> Unit = {},
 ) {
     Column(
@@ -154,7 +158,7 @@ private fun Content(
 private fun DismissibleTask(
     task: Task,
     onDeleteTask: (Task) -> Unit,
-    onTaskUpdate: () -> Unit,
+    onTaskUpdate: (Task) -> Unit,
 ) {
     Dismissible(
         item = task,
@@ -165,8 +169,11 @@ private fun DismissibleTask(
         content = {
             TaskItem(
                 task = task,
-                onCheckedChange = {
-                    onTaskUpdate()
+                onCheckedChange = { checked ->
+                    val updatedTask = task.copy(
+                        checked = checked
+                    )
+                    onTaskUpdate(updatedTask)
                 }
             )
         }
@@ -193,7 +200,6 @@ private fun TaskItem(
                 modifier = Modifier.weight(1f),
                 checked = task.checked,
                 onCheckedChange = {
-                    task.checked = !task.checked
                     onCheckedChange(!task.checked)
                 }
             )
@@ -217,6 +223,7 @@ private fun TaskItem(
 @Preview
 fun TaskItemCheckedPreview() {
     TaskItem(task = Task(
+        id = "task1",
         checked = true,
         description = "Bathe In Milk"
     ))
@@ -227,6 +234,7 @@ fun TaskItemCheckedPreview() {
 @Preview
 fun TaskItemUncheckedPreview() {
     TaskItem(task = Task(
+        id = "task2",
         checked = false,
         description = "Drive a Husky Sled"
     ))
