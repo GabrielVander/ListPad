@@ -1,7 +1,10 @@
 package vander.gabriel.listpad.presentation.screens
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -145,31 +148,4 @@ private fun Content(
 
         }
     }
-}
-
-@ExperimentalMaterialApi
-@Composable
-fun DismissibleTask(
-    task: Task,
-    onDeleteTask: (Task) -> Unit,
-    onTaskUpdate: (Task) -> Unit,
-) {
-    Dismissible<Task>(
-        item = task,
-        dismissed = onDeleteTask,
-        directions = setOf(
-            DismissDirection.EndToStart
-        ),
-        content = {
-            TaskItem(
-                task = task,
-                onCheckedChange = { checked ->
-                    val updatedTask = task.copy(
-                        checked = checked
-                    )
-                    onTaskUpdate(updatedTask)
-                }
-            )
-        }
-    )
 }
