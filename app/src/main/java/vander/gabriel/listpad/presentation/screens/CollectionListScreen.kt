@@ -48,7 +48,7 @@ fun CollectionListScreen(
             }
         },
         floatingActionButton = {
-            AddFloatingActionButton(onClick = {
+            NewItemButton(onClick = {
                 navigationController
                     .navigate(
                         NavigationRoutes

@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AddFloatingActionButton(
+fun NewItemButton(
     onClick: () -> Unit,
 ) {
     FloatingActionButton(
@@ -28,7 +28,7 @@ fun AddFloatingActionButton(
 @Composable
 @Preview
 private fun AddFloatingButtonPreview() {
-    AddFloatingActionButton {
+    NewItemButton {
 
     }
 }

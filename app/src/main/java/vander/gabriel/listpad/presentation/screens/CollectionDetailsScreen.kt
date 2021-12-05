@@ -58,7 +58,7 @@ fun CollectionDetailsScreen(
             }
         },
         floatingActionButton = {
-            AddFloatingActionButton(onClick = {
+            NewItemButton(onClick = {
                 setShowDialog(true)
             })
         }
