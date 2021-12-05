@@ -1,11 +1,20 @@
 package vander.gabriel.listpad.presentation.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -92,14 +101,26 @@ fun CollectionDetailsScreen(
                     }
                 )
 
-                Content(collection, onTaskUpdate = {
-                    val updatedCollection = collection.copy(
-                        tasks = collection.tasks
-                    )
+                Content(
+                    collection = collection,
+                    onTaskUpdate = {
+                        val updatedCollection = collection.copy(
+                            tasks = collection.tasks
+                        )
 
-                    collectionsViewModel.updateCollection(updatedCollection)
-                    collectionsViewModel.getCollection(collectionId)
-                })
+                        collectionsViewModel.updateCollection(updatedCollection)
+                        collectionsViewModel.getCollection(collectionId)
+                    },
+                    onDeleteTask = { taskToDelete ->
+                        val updatedCollection = collection.copy(
+                            tasks = collection
+                                .tasks
+                                .filter { originalTask -> originalTask != taskToDelete }
+                        )
+
+                        collectionsViewModel.updateCollection(updatedCollection)
+                    }
+                )
             }
             else -> {
                 ErrorMessage("Oh no, something went wrong")
@@ -110,7 +131,11 @@ fun CollectionDetailsScreen(
 
 @ExperimentalMaterialApi
 @Composable
-private fun Content(collection: Collection, onTaskUpdate: () -> Unit = {}) {
+private fun Content(
+    collection: Collection,
+    onTaskUpdate: () -> Unit = {},
+    onDeleteTask: (Task) -> Unit = {},
+) {
     Column(
         Modifier
             .fillMaxSize()
@@ -119,21 +144,115 @@ private fun Content(collection: Collection, onTaskUpdate: () -> Unit = {}) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Text(collection.description)
+        Spacer(modifier = Modifier.height(5.dp))
         if (collection.tasks.isEmpty()) {
             EmptyContent("No tasks!")
         } else {
             collection
                 .tasks
                 .forEach { task ->
-                    TaskItem(
-                        task = task,
-                        onCheckedChange = {
-                            onTaskUpdate()
-                        }
-                    )
+                    DismissibleTask(task, onDeleteTask, onTaskUpdate)
                 }
+
         }
     }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun DismissibleTask(
+    task: Task,
+    onDeleteTask: (Task) -> Unit,
+    onTaskUpdate: () -> Unit,
+) {
+    Dismissible(
+        item = task,
+        dismissed = onDeleteTask,
+        directions = setOf(
+            DismissDirection.EndToStart
+        ),
+        content = {
+            TaskItem(
+                task = task,
+                onCheckedChange = {
+                    onTaskUpdate()
+                }
+            )
+        }
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun <T> Dismissible(
+    item: T,
+    directions: Set<DismissDirection> = setOf(
+        DismissDirection.StartToEnd,
+        DismissDirection.EndToStart,
+    ),
+    defaultBackgroundColor: Color = Color.White,
+    dismissedToStartBackgroundColor: Color = Color.Red,
+    dismissedToEndBackgroundColor: Color = Color.Green,
+    startToEndIcon: ImageVector = Icons.Default.Done,
+    endToStartIcon: ImageVector = Icons.Default.Delete,
+    dismissed: (item: T) -> Unit,
+    content: @Composable () -> Unit,
+) {
+    val dismissState = rememberDismissState()
+    if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+        dismissed(item)
+    }
+
+    SwipeToDismiss(
+        state = dismissState,
+        modifier = Modifier.padding(vertical = 1.dp),
+        directions = directions,
+        dismissThresholds = { direction ->
+            FractionalThreshold(
+                if (direction == DismissDirection.StartToEnd) 0.25f
+                else 0.5f
+            )
+        },
+        background = {
+            val direction = dismissState.dismissDirection ?: return@SwipeToDismiss
+
+            val color by animateColorAsState(
+                when (dismissState.targetValue) {
+                    DismissValue.Default -> defaultBackgroundColor
+                    DismissValue.DismissedToStart -> dismissedToStartBackgroundColor
+                    DismissValue.DismissedToEnd -> dismissedToEndBackgroundColor
+                }
+            )
+            val alignment = when (direction) {
+                DismissDirection.StartToEnd -> Alignment.CenterStart
+                DismissDirection.EndToStart -> Alignment.CenterEnd
+            }
+            val icon = when (direction) {
+                DismissDirection.StartToEnd -> startToEndIcon
+                DismissDirection.EndToStart -> endToStartIcon
+            }
+            val scale by animateFloatAsState(
+                if (dismissState.targetValue == DismissValue.Default) 0.75f else 1f
+            )
+
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(horizontal = 20.dp),
+                contentAlignment = alignment
+            ) {
+                Icon(
+                    icon,
+                    contentDescription = "Localized description",
+                    modifier = Modifier.scale(scale)
+                )
+            }
+        },
+        dismissContent = {
+            content()
+        }
+    )
 }
 
 @ExperimentalMaterialApi
@@ -178,9 +297,19 @@ private fun TaskItem(
 @ExperimentalMaterialApi
 @Composable
 @Preview
-private fun TaskItemPreview() {
+fun TaskItemCheckedPreview() {
     TaskItem(task = Task(
         checked = true,
-        description = "Remember: breaked zucchini tastes best when toasted"
+        description = "Bathe In Milk"
+    ))
+}
+
+@ExperimentalMaterialApi
+@Composable
+@Preview
+fun TaskItemUncheckedPreview() {
+    TaskItem(task = Task(
+        checked = false,
+        description = "Drive a Husky Sled"
     ))
 }
