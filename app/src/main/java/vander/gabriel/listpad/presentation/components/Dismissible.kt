@@ -84,14 +84,12 @@ fun <T> Dismissible(
                     },
                 contentAlignment = alignment
             ) {
-                Button(onClick = { dismissed(item) }) {
-                    Image(
-                        imageVector = icon,
-                        contentDescription = "Localized description",
-                        modifier = Modifier
-                            .scale(scale)
-                    )
-                }
+                Image(
+                    imageVector = icon,
+                    contentDescription = "Localized description",
+                    modifier = Modifier
+                        .scale(scale)
+                )
             }
         },
         dismissContent = {
