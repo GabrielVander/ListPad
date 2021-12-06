@@ -2,7 +2,9 @@ package vander.gabriel.listpad.presentation.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -76,14 +78,20 @@ fun <T> Dismissible(
                 Modifier
                     .fillMaxSize()
                     .background(color)
-                    .padding(horizontal = 20.dp),
+                    .padding(horizontal = 20.dp)
+                    .clickable {
+                        dismissed(item)
+                    },
                 contentAlignment = alignment
             ) {
-                Icon(
-                    icon,
-                    contentDescription = "Localized description",
-                    modifier = Modifier.scale(scale)
-                )
+                Button(onClick = { dismissed(item) }) {
+                    Image(
+                        imageVector = icon,
+                        contentDescription = "Localized description",
+                        modifier = Modifier
+                            .scale(scale)
+                    )
+                }
             }
         },
         dismissContent = {
