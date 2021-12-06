@@ -2,6 +2,9 @@
 
 ### Projeto integrado das disciplinas de Programação de Dispositivos Android 1 (PA1) e Banco de Dados para Computação Móvel (BDM)
 
+# Vído narrado
+https://youtu.be/MZ9MuBmXFzU
+
 # Projeto ListPad
 
 O projeto consiste no desenvolvimento de um aplicativo simples de lista em lista com uso de
