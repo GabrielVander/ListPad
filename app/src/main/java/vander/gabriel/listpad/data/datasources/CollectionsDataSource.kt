@@ -9,4 +9,5 @@ interface CollectionsDataSource {
     fun getCollection(collectionId: String): Flow<CollectionModel?>
     fun updateCollection(collection: CollectionModel): CollectionModel?
     fun deleteCollection(collectionId: String)
+    fun getCollectionByName(collectionName: String): Flow<CollectionModel?>
 }

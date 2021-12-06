@@ -4,10 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 import vander.gabriel.listpad.domain.entities.Collection
 import vander.gabriel.listpad.domain.entities.CollectionCategory
 import vander.gabriel.listpad.domain.usecases.SaveCollectionUseCase
+import vander.gabriel.listpad.domain.value_objects.CollectionNameValueObject
 import java.util.*
 
 data class CollectionCreationState(
@@ -23,6 +26,20 @@ class CollectionCreationViewModel(
     private val saveCollectionUseCase: SaveCollectionUseCase = SaveCollectionUseCase(),
 ) :
     ViewModel() {
+
+    var state: CollectionCreationState by mutableStateOf(
+        CollectionCreationState(
+            name = "",
+            description = "",
+            category = CollectionCategory.GENERAL,
+            isUrgent = false,
+        )
+    )
+
+    private val _collectionNameValueObject: MutableStateFlow<CollectionNameValueObject> =
+        MutableStateFlow(CollectionNameValueObject())
+    val collectionNameValueObject: StateFlow<CollectionNameValueObject> = _collectionNameValueObject
+
     fun onCategorySelected(category: CollectionCategory) {
         state = state.copy(
             category = category
@@ -30,9 +47,7 @@ class CollectionCreationViewModel(
     }
 
     fun onNameChange(newName: String) {
-        state = state.copy(
-            name = newName
-        )
+        _collectionNameValueObject.value.validate(newName)
     }
 
     fun onDescriptionChange(newDescription: String) {
@@ -77,13 +92,4 @@ class CollectionCreationViewModel(
             }
         )
     }
-
-    var state: CollectionCreationState by mutableStateOf(
-        CollectionCreationState(
-            name = "",
-            description = "",
-            category = CollectionCategory.GENERAL,
-            isUrgent = false,
-        )
-    )
 }

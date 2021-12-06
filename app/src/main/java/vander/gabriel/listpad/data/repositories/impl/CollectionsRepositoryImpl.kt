@@ -123,4 +123,18 @@ class CollectionsRepositoryImpl(
                 .left()
         }
     }
+
+    override fun checkIfCollectionExists(collectionName: String): Either<Failure, Flow<Collection>> {
+        return try {
+            val result: Flow<CollectionModel?> =
+                runBlocking { dataSource.getCollectionByName(collectionName) }
+
+            result.map { collectionModel -> collectionMapper.map(collectionModel!!) }.right()
+
+        } catch (e: Exception) {
+            Log.w(tag, defaultErrorMessage, e)
+            UnexpectedDataSourceFailure(e.message)
+                .left()
+        }
+    }
 }

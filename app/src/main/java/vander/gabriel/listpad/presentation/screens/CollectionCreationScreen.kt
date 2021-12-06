@@ -23,9 +23,12 @@ fun CollectionCreationScreen(
             }
         },
     ) {
-        CollectionCreation(onSave = {
-            collectionsViewModel.updateCollectionList()
-            navigationController.popBackStack()
-        })
+        CollectionCreation(
+            onSave = { collection ->
+                collectionsViewModel.updateCollection(collection)
+                collectionsViewModel.updateCollectionList()
+                navigationController.popBackStack()
+            },
+        )
     }
 }

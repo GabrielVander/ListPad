@@ -120,4 +120,37 @@ class FirebaseDataSourceImpl : CollectionsDataSource {
             }
     }
 
+    override fun getCollectionByName(collectionName: String): Flow<CollectionModel?> =
+        callbackFlow {
+            val snapshotListener = collectionReference
+                .whereEqualTo("name", collectionName)
+                .addSnapshotListener { querySnapshot, exception ->
+                    if (querySnapshot != null) {
+                        if (querySnapshot.isEmpty) {
+                            val message = "Collection with name $collectionName not found"
+
+                            Log.w(tag, message)
+                            throw DocumentNotFoundException(message)
+                        }
+
+                        if (BuildConfig.DEBUG) {
+                            Log.i(tag, "Retrieved collection with name $collectionName")
+                        }
+
+                        trySendBlocking(querySnapshot
+                            .documents[0]
+                            .toObject<CollectionModel>())
+                    } else {
+                        Log.w(tag,
+                            "Something went wrong while attempting " +
+                                    "to retrieve collection with name $collectionName:\n$exception")
+                        throw DocumentNotFoundException()
+                    }
+                }
+
+            awaitClose {
+                snapshotListener.remove()
+            }
+
+        }
 }

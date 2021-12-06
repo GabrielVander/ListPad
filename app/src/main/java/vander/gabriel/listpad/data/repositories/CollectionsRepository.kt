@@ -12,4 +12,5 @@ interface CollectionsRepository {
     fun getSingleCollection(collectionId: String): Either<Failure, Flow<Collection>>
     fun updateCollection(collection: Collection): Either<Failure, Collection>
     fun deleteCollection(collectionId: String): Either<Failure, Unit>
+    fun checkIfCollectionExists(collectionName: String): Either<Failure, Flow<Collection>>
 }
